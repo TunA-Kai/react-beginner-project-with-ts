@@ -235,6 +235,13 @@ main {
 .next-btn:hover {
   color: var(--clr-primary-5);
 }
+
+.prev-btn:disabled,
+.next-btn:disabled {
+  color: var(--clr-grey-2);
+  cursor: default;
+}
+
 .random-btn {
   margin-top: 0.5rem;
   background: var(--clr-primary-10);
