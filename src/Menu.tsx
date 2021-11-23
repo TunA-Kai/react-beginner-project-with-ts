@@ -1,14 +1,15 @@
 import { DishInterface } from './Interface'
+import { useParams } from 'react-router-dom'
 
 interface MenuProps {
   items: DishInterface[]
-  chooseCategory: string
 }
 
-function Menu({ items, chooseCategory }: MenuProps) {
+function Menu({ items }: MenuProps) {
+  const { category } = useParams()
   const displayItems =
-    chooseCategory !== 'all'
-      ? items.filter(item => item.category === chooseCategory)
+    category !== 'all'
+      ? items.filter(item => item.category === category)
       : items
 
   return (

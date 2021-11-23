@@ -1,13 +1,13 @@
 import items from './data'
 import Menu from './Menu'
 import Categories from './Categories'
-import { useEffect, useState } from 'react'
 import { DishInterface } from './Interface'
+import { useEffect, useState } from 'react'
+import { Routes, Route, Link } from 'react-router-dom'
 
 function App() {
   const [menuItems, setMenuItems] = useState<DishInterface[]>(items)
   const [categories, setCategories] = useState<string[]>([])
-  const [chooseCategory, setChooseCategory] = useState('all')
 
   useEffect(() => {
     const setCategory = new Set(menuItems.map(item => item.category))
@@ -18,14 +18,23 @@ function App() {
     <main>
       <section className='menu section'>
         <div className='title'>
-          <h2>our menu</h2>
+          <Link to='/'>
+            <h2>our menu</h2>
+          </Link>
           <div className='underline'></div>
         </div>
-        <Categories
-          categories={categories}
-          setChooseCategory={setChooseCategory}
-        />
-        <Menu items={menuItems} chooseCategory={chooseCategory} />
+        <Categories categories={categories} />
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <h2 style={{ textAlign: 'center' }}>
+                Click a category to see items
+              </h2>
+            }
+          />
+          <Route path='/:category' element={<Menu items={menuItems} />} />
+        </Routes>
       </section>
     </main>
   )

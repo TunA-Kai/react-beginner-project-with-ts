@@ -1,19 +1,16 @@
+import { Link } from 'react-router-dom'
+
 interface CategoriesProps {
   categories: string[]
-  setChooseCategory: React.Dispatch<React.SetStateAction<string>>
 }
 
-function Categories({ categories, setChooseCategory }: CategoriesProps) {
+function Categories({ categories }: CategoriesProps) {
   return (
     <div className='btn-container'>
       {categories.map(category => (
-        <button
-          key={category}
-          className='filter-btn'
-          onClick={() => setChooseCategory(category)}
-        >
-          {category}
-        </button>
+        <Link to={`/${category}`} key={category}>
+          <button className='filter-btn'>{category}</button>
+        </Link>
       ))}
     </div>
   )
