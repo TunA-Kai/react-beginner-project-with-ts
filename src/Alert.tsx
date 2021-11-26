@@ -1,7 +1,7 @@
 interface AlertProps {}
 
 function Alert({}: AlertProps) {
-  return <></>
+  return <>Alert</>
 }
 
 export default Alert
