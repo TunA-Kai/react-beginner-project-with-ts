@@ -3,7 +3,7 @@ import Values from 'values.js'
 import { useState, useRef } from 'react'
 
 function App() {
-  const [color, setColor] = useState('#f15025')
+  const [color, setColor] = useState('#FFB8D1')
   const inputRef = useRef<any>()
   let colorList: any[]
 
@@ -21,7 +21,7 @@ function App() {
         <form onSubmit={handleSubmit}>
           <input
             type='text'
-            defaultValue='#f15025'
+            defaultValue='#FFB8D1'
             ref={inputRef}
             className={colorList.length > 0 ? undefined : 'error'}
           />
