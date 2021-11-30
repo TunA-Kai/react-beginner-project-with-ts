@@ -1,14 +1,18 @@
+import { useContext } from 'react'
 import { FaBars } from 'react-icons/fa'
+import { AppContext } from './Context'
 
-interface HomeProps {}
-
-function Home({}: HomeProps) {
+function Home() {
+  console.log('Home renderring')
+  const { toggleModal, toggleSidebar } = useContext(AppContext)
   return (
     <main>
-      <button className='sidebar-toggle'>
+      <button className='sidebar-toggle' onClick={toggleSidebar}>
         <FaBars />
       </button>
-      <button className='btn'>show modal</button>
+      <button className='btn' onClick={toggleModal}>
+        show modal
+      </button>
     </main>
   )
 }
