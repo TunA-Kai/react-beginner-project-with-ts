@@ -1,10 +1,10 @@
-interface LinkIn {
+export interface LinkIn {
   label: string
   icon: JSX.Element
   url: string
 }
 
-export interface SubLink {
+export interface SubLinkIn {
   page: string
   links: LinkIn[]
 }
