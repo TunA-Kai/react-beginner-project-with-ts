@@ -6,7 +6,8 @@ import CartContainer from './CartContainer'
 // items
 
 function App() {
-  // if (loading) {
+  // const { status } = useGlobalContext()
+  // if (status === 'pending') {
   //   return (
   //     <div className='loading'>
   //       <h1>Loading...</h1>

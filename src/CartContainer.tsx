@@ -4,7 +4,8 @@ import { useGlobalContext } from './Context'
 interface CartContainerProps {}
 
 function CartContainer({}: CartContainerProps) {
-  const { cart } = useGlobalContext()
+  const { cart, total, dispatch } = useGlobalContext()
+
   if (cart.length === 0) {
     return (
       <section className='cart'>
@@ -33,12 +34,12 @@ function CartContainer({}: CartContainerProps) {
         <hr />
         <div className='cart-total'>
           <h4>
-            total <span>$0.00</span>
+            total <span>{`$${total.toFixed(2)}`}</span>
           </h4>
         </div>
         <button
           className='btn clear-btn'
-          onClick={() => console.log('clear cart')}
+          onClick={() => dispatch({ type: 'clearAll' })}
         >
           clear cart
         </button>

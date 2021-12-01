@@ -6,24 +6,36 @@ import {
   createContext,
 } from 'react'
 import cartItems from './data'
-import reducer from './reducer'
-import { ItemIn } from './Interface'
+import reducer, { calculateDerivedState } from './reducer'
+import { stateIn, actionIn } from './Interface'
 
 const URL = 'https://course-api.com/react-useReducer-cart-project'
 
-interface ContextIn {
-  cart: ItemIn[]
+interface ContextIn extends stateIn {
+  dispatch: React.Dispatch<actionIn>
 }
 
 const AppContext = createContext<ContextIn>({} as ContextIn)
 
+const initialState: stateIn = {
+  status: 'resolved',
+  cart: cartItems,
+  total: 0,
+  amount: 0,
+}
+
 const AppProvider = ({ children }: any) => {
-  const [cart, setCart] = useState<ItemIn[]>(cartItems)
+  const [state, dispatch] = useReducer(
+    reducer,
+    initialState,
+    calculateDerivedState,
+  )
 
   return (
     <AppContext.Provider
       value={{
-        cart,
+        ...state,
+        dispatch,
       }}
     >
       {children}
