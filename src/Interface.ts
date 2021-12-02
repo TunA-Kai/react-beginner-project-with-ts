@@ -14,6 +14,8 @@ export interface stateIn {
 }
 
 export interface actionIn {
-  type: string
+  cart?: ItemIn[]
+  type?: string
   id?: number
+  status?: string
 }
