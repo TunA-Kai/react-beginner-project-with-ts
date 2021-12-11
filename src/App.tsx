@@ -21,6 +21,7 @@ const userIcon: { [key: string]: JSX.Element } = {
 }
 
 interface User {
+  [key: string]: string
   image: string
   phone: string
   email: string
@@ -53,7 +54,7 @@ function App() {
       },
     } = person
 
-    const newPerson = {
+    const newPerson: User = {
       image,
       phone,
       email,
@@ -108,7 +109,13 @@ function App() {
   function handleValue(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void {
-    console.dir(e.target)
+    if (e.currentTarget.classList.contains('icon')) {
+      const newValue = e.currentTarget.dataset.label
+      if (newValue) {
+        setTitle(newValue)
+        person && setValue(person[newValue])
+      }
+    }
   }
 }
 
