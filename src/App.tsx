@@ -1,3 +1,4 @@
+import { useReducer } from 'react'
 import { useEffect, useState } from 'react'
 import {
   FaEnvelopeOpen,
@@ -31,48 +32,104 @@ interface User {
   name: string
 }
 
+interface State {
+  loading: boolean
+  person: null | User
+  title: string
+  value: string
+  msg?: string
+}
+
+const initialValue = {
+  loading: true,
+  person: null,
+  title: 'name',
+  value: 'random person',
+}
+
+function reducer(
+  state: State,
+  { type, payload }: { type: string; payload: any },
+): State {
+  switch (type) {
+    case 'RESOLVE':
+      return {
+        ...state,
+        loading: false,
+        ...payload,
+      }
+    case 'REJECT':
+      return {
+        ...state,
+        loading: false,
+        msg: payload.msg,
+      }
+    case 'PENDING':
+      return {
+        ...state,
+        loading: true,
+      }
+    case 'HOVERRING':
+      return {
+        ...state,
+        ...payload,
+      }
+    default:
+      return state
+  }
+}
+
 function App() {
-  const [loading, setLoading] = useState(true)
-  const [person, setPerson] = useState<User | null>(null)
-  const [title, setTitle] = useState('name')
-  const [value, setValue] = useState('random person')
+  const [state, dispatch] = useReducer(reducer, initialValue)
+  const { loading, person, title, value, msg } = state
 
   async function getPerson() {
-    const response = await fetch(URL)
-    const data = await response.json()
+    dispatch({ type: 'PENDING', payload: 'nothing here' })
+    try {
+      const response = await fetch(URL)
+      if (!response.ok) throw new Error(`Cannot load data from ${URL} 🎃🎃🎃`)
 
-    const [person] = data.results
-    const {
-      phone,
-      email,
-      login: { password },
-      dob: { age },
-      picture: { large: image },
-      name: { first, last },
-      location: {
-        street: { number, name },
-      },
-    } = person
+      const data = await response.json()
 
-    const newPerson: User = {
-      image,
-      phone,
-      email,
-      password,
-      age,
-      street: `${number} ${name}`,
-      name: `${first} ${last}`,
+      const [person] = data.results
+      const {
+        phone,
+        email,
+        login: { password },
+        dob: { age },
+        picture: { large: image },
+        name: { first, last },
+        location: {
+          street: { number, name },
+        },
+      } = person
+
+      const newPerson: User = {
+        image,
+        phone,
+        email,
+        password,
+        age,
+        street: `${number} ${name}`,
+        name: `${first} ${last}`,
+      }
+      dispatch({
+        type: 'RESOLVE',
+        payload: { person: newPerson, title: 'name', value: newPerson.name },
+      })
+    } catch (error: any) {
+      dispatch({
+        type: 'REJECT',
+        payload: { msg: error.message },
+      })
     }
-
-    setLoading(false)
-    setPerson(newPerson)
-    setTitle('name')
-    setValue(newPerson.name)
   }
 
   useEffect(() => {
     getPerson()
   }, [])
+
+  if (msg) return <h1>{msg}</h1>
 
   return (
     <main>
@@ -111,9 +168,11 @@ function App() {
   ): void {
     if (e.currentTarget.classList.contains('icon')) {
       const newValue = e.currentTarget.dataset.label
-      if (newValue) {
-        setTitle(newValue)
-        person && setValue(person[newValue])
+      if (newValue && person) {
+        dispatch({
+          type: 'HOVERRING',
+          payload: { title: newValue, value: person[newValue] },
+        })
       }
     }
   }
