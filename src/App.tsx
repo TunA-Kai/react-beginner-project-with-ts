@@ -16,17 +16,17 @@ interface State {
   status: STATUS
   photos: PhotoIn[]
   error?: string
+  page: number
 }
 
 const initialState: State = {
   status: STATUS.PENDING,
   photos: [],
+  page: 1,
 }
 
 type ACTION =
-  | {
-      type: STATUS.PENDING
-    }
+  | { type: STATUS.PENDING; payload?: number }
   | { type: STATUS.SUCCESS; payload: PhotoIn[] }
   | { type: STATUS.REJECT; payload: string }
 
@@ -36,12 +36,13 @@ function reducer(state: State, action: ACTION): State {
       return {
         ...state,
         status: STATUS.PENDING,
+        page: action.payload ?? state.page,
       }
     case STATUS.SUCCESS:
       return {
         ...state,
         status: STATUS.SUCCESS,
-        photos: action.payload,
+        photos: state.photos.concat(action.payload),
       }
     case STATUS.REJECT:
       return {
@@ -54,11 +55,44 @@ function reducer(state: State, action: ACTION): State {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const { status, photos, error } = state
+  const { status, photos, error, page } = state
 
-  async function fetchImages() {
+  useEffect(() => {
+    fetchImages()
+  }, [page])
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [status])
+
+  return (
+    <main>
+      <section className='search'>
+        <form className='search-form'>
+          <input type='text' placeholder='search' className='form-input' />
+          <button type='submit' className='submit-btn' onClick={handleSubmit}>
+            <FaSearch />
+          </button>
+        </form>
+      </section>
+      <section className='photos'>
+        {status === STATUS.REJECT && <h2 className='loading'>{error}</h2>}
+        <div className='photos-center'>
+          {photos.map(image => {
+            return <Photo key={image.id} image={image} />
+          })}
+        </div>
+        {status === STATUS.PENDING && <h2 className='loading'>Loading...</h2>}
+      </section>
+    </main>
+  )
+
+  /* ---------------- FUNCTIONS --------------- */
+  async function fetchImages(): Promise<void> {
     dispatch({ type: STATUS.PENDING })
-    let url = `${mainUrl}${clientID}`
+    const ulrPage = `&page=${page}`
+    let url = `${mainUrl}${clientID}${ulrPage}`
     try {
       const response = await fetch(url)
       const data = await response.json()
@@ -91,35 +125,20 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    fetchImages()
-  }, [])
-
-  function handleSubmit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function handleSubmit(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ): void {
     e.preventDefault()
   }
 
-  return (
-    <main>
-      <section className='search'>
-        <form className='search-form'>
-          <input type='text' placeholder='search' className='form-input' />
-          <button type='submit' className='submit-btn' onClick={handleSubmit}>
-            <FaSearch />
-          </button>
-        </form>
-      </section>
-      <section className='phots'>
-        {status === STATUS.REJECT && <h2 className='loading'>{error}</h2>}
-        <div className='photos-center'>
-          {photos.map(image => {
-            return <Photo key={image.id} image={image} />
-          })}
-        </div>
-        {status === STATUS.PENDING && <h2 className='loading'>Loading...</h2>}
-      </section>
-    </main>
-  )
+  function handleScroll(): void {
+    if (
+      status !== STATUS.PENDING &&
+      window.innerHeight + window.scrollY >= document.body.scrollHeight - 100
+    ) {
+      dispatch({ type: STATUS.PENDING, payload: page + 1 })
+    }
+  }
 }
 
 export default App
