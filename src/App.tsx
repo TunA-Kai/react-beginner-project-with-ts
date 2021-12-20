@@ -16,6 +16,7 @@ interface State {
   status: STATUS
   photos: PhotoIn[]
   error?: string
+  isSearching?: Boolean
   page: number
 }
 
@@ -27,7 +28,7 @@ const initialState: State = {
 
 type ACTION =
   | { type: STATUS.PENDING; payload?: number }
-  | { type: STATUS.SUCCESS; payload: PhotoIn[] }
+  | { type: STATUS.SUCCESS; payload: PhotoIn[]; isSearching: Boolean }
   | { type: STATUS.REJECT; payload: string }
 
 function reducer(state: State, action: ACTION): State {
@@ -42,7 +43,9 @@ function reducer(state: State, action: ACTION): State {
       return {
         ...state,
         status: STATUS.SUCCESS,
-        photos: state.photos.concat(action.payload),
+        photos: action.isSearching
+          ? action.payload
+          : state.photos.concat(action.payload),
       }
     case STATUS.REJECT:
       return {
@@ -56,6 +59,7 @@ function reducer(state: State, action: ACTION): State {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { status, photos, error, page } = state
+  const [query, setQuery] = useState('')
 
   useEffect(() => {
     fetchImages()
@@ -70,7 +74,13 @@ function App() {
     <main>
       <section className='search'>
         <form className='search-form'>
-          <input type='text' placeholder='search' className='form-input' />
+          <input
+            type='text'
+            placeholder='search'
+            className='form-input'
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+          />
           <button type='submit' className='submit-btn' onClick={handleSubmit}>
             <FaSearch />
           </button>
@@ -80,7 +90,7 @@ function App() {
         {status === STATUS.REJECT && <h2 className='loading'>{error}</h2>}
         <div className='photos-center'>
           {photos.map(image => {
-            return <Photo key={image.id} image={image} />
+            return <Photo key={Math.random() * Math.pow(10, 9)} image={image} />
           })}
         </div>
         {status === STATUS.PENDING && <h2 className='loading'>Loading...</h2>}
@@ -90,13 +100,19 @@ function App() {
 
   /* ---------------- FUNCTIONS --------------- */
   async function fetchImages(): Promise<void> {
-    dispatch({ type: STATUS.PENDING })
     const ulrPage = `&page=${page}`
-    let url = `${mainUrl}${clientID}${ulrPage}`
+    const urlQuery = `&query=${query}`
+    const url = query
+      ? `${searchUrl}${clientID}${ulrPage}${urlQuery}`
+      : `${mainUrl}${clientID}${ulrPage}`
     try {
       const response = await fetch(url)
       const data = await response.json()
-      const photosResult: PhotoIn[] = data.map((item: any): PhotoIn => {
+      const results = query ? data.results : data
+      if (results.length === 0)
+        throw new Error(`Can not find any images with keyword: ${query}`)
+
+      const photosResult: PhotoIn[] = results.map((item: any): PhotoIn => {
         const {
           id,
           urls: { regular },
@@ -118,7 +134,11 @@ function App() {
           medium,
         }
       })
-      dispatch({ type: STATUS.SUCCESS, payload: photosResult })
+      dispatch({
+        type: STATUS.SUCCESS,
+        payload: photosResult,
+        isSearching: Boolean(query) && page === 1,
+      })
     } catch (error: any) {
       console.log(error)
       dispatch({ type: STATUS.REJECT, payload: error.message })
@@ -129,6 +149,7 @@ function App() {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void {
     e.preventDefault()
+    page === 1 ? fetchImages() : dispatch({ type: STATUS.PENDING, payload: 1 })
   }
 
   function handleScroll(): void {
