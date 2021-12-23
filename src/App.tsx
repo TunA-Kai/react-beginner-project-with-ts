@@ -1,5 +1,10 @@
+import { useGlobalContext } from './Context'
+
+import SetupForm from './SetupForm'
+import Loading from './Loading'
+import Modal from './Modal'
 function App() {
-  return <div className='App'></div>
+    return <h2>quiz starter</h2>
 }
 
 export default App
