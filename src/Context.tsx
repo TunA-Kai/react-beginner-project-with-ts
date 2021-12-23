@@ -1,6 +1,7 @@
 import axios from 'axios'
-import React, { useState, useContext, useEffect } from 'react'
-import { ContextIn } from './Interface'
+import React, { useState, useContext, useEffect, useReducer } from 'react'
+import { ContextT, QuestionT, StatusT } from './Interface'
+import { reducer } from './reducer'
 
 const table = {
     sports: 21,
@@ -11,14 +12,29 @@ const table = {
 const API_ENDPOINT = 'https://opentdb.com/api.php?'
 
 const url = ''
+const tempUrl =
+    'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple'
 
-const AppContext = React.createContext({} as ContextIn)
-
-const AppProvider: React.FC = ({ children }) => {
-    return <AppContext.Provider value='hello'>{children}</AppContext.Provider>
+const initialState = {
+    status: 'setUpQues' as StatusT,
+    questions: [] as QuestionT[],
+    activeIndex: 0,
+    correctAns: 0,
 }
 
-export function useGlobalContext(): ContextIn {
+const AppContext = React.createContext({} as ContextT)
+
+const AppProvider: React.FC = ({ children }) => {
+    const [state, dispatch] = useReducer(reducer, initialState)
+
+    return (
+        <AppContext.Provider value={{ ...state, dispatch }}>
+            {children}
+        </AppContext.Provider>
+    )
+}
+
+export function useGlobalContext(): ContextT {
     return useContext(AppContext)
 }
 
