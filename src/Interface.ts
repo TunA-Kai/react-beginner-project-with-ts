@@ -1,8 +1,10 @@
+import { ActionType } from './actionType'
+
 export type StatusT =
     | 'setUpQues'
     | 'getQues'
     | 'answerQues'
-    | 'failFetch'
+    | 'error'
     | 'showResult'
 
 export interface StateT {
@@ -10,13 +12,25 @@ export interface StateT {
     questions: QuestionT[]
     activeIndex: number
     correctAns: number
-    error?: string
+    error: string
 }
 
-export type ActionT = {}
+export type ActionT =
+    | {
+          type: ActionType.SET_QUESTIONS
+          payload: { questions: QuestionT[] }
+      }
+    | {
+          type: ActionType.DISPLAY_ERROR
+          error: string
+      }
 
 export interface ContextT extends StateT {
     dispatch: React.Dispatch<ActionT>
 }
 
-export interface QuestionT {}
+export interface QuestionT {
+    question: string
+    answer: string
+    wrongAns: Array<string>
+}
