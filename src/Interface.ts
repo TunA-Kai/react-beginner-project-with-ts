@@ -24,6 +24,13 @@ export type ActionT =
           type: ActionType.DISPLAY_ERROR
           error: string
       }
+    | {
+          type: ActionType.NEXT_QUESTION
+          answerOfUser?: Boolean
+      }
+    | {
+          type: ActionType.RESTART_QUIZ
+      }
 
 export interface ContextT extends StateT {
     dispatch: React.Dispatch<ActionT>

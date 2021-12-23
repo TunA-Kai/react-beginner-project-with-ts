@@ -19,7 +19,7 @@ const tempUrl =
 const initialState = {
     status: 'setUpQues' as StatusT,
     questions: [] as QuestionT[],
-    activeIndex: 4,
+    activeIndex: 0,
     correctAns: 0,
     error: '',
 }
