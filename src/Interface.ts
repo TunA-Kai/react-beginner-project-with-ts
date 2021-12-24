@@ -1,1 +1,1 @@
-export interface Interface {}
+export interface ContextT {}
