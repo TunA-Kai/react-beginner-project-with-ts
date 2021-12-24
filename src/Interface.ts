@@ -31,6 +31,9 @@ export type ActionT =
     | {
           type: ActionType.RESTART_QUIZ
       }
+    | {
+          type: ActionType.GET_QUESTIONS
+      }
 
 export interface ContextT extends StateT {
     dispatch: React.Dispatch<ActionT>

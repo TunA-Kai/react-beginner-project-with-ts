@@ -1,5 +1,5 @@
 import { ActionType } from './actionType'
-import { ActionT, StateT, StatusT } from './Interface'
+import { ActionT, StateT } from './Interface'
 
 export function reducer(state: StateT, action: ActionT): StateT {
     switch (action.type) {
@@ -38,6 +38,11 @@ export function reducer(state: StateT, action: ActionT): StateT {
                 activeIndex: 0,
                 correctAns: 0,
                 questions: [],
+            }
+        case ActionType.GET_QUESTIONS:
+            return {
+                ...state,
+                status: 'getQues',
             }
     }
 }

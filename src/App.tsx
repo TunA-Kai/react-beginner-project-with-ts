@@ -10,7 +10,7 @@ function App() {
     const { status, questions, activeIndex, correctAns, dispatch } =
         useGlobalContext()
 
-    if (status === 'setUpQues') return <SetupForm />
+    if (status === 'setUpQues' || status === 'error') return <SetupForm />
     if (status === 'getQues') return <Loading />
 
     const { answer, wrongAns, question } = questions[activeIndex]
