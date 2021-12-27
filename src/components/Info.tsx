@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 import { GoRepo, GoGist } from 'react-icons/go'
 import { FiUsers, FiUserPlus } from 'react-icons/fi'
+import { useGithubContext } from '../context/context'
+import { IconType } from 'react-icons'
+import { FC } from 'react'
 
 const Wrapper = styled.section`
     display: grid;
@@ -54,10 +57,74 @@ const Wrapper = styled.section`
     }
 `
 
+interface ItemT {
+    id: number
+    Icon: IconType
+    label: string
+    value: any
+    color: string
+}
+
 interface InfoProps {}
 
 const UserInfo: React.FC<InfoProps> = ({}) => {
-    return <> UserInfo components </>
+    const { githubUser } = useGithubContext()
+    const { public_repos, followers, following, public_gists } = githubUser
+
+    const items = [
+        {
+            id: 1,
+            Icon: GoRepo,
+            label: 'repos',
+            value: public_repos,
+            color: 'pink',
+        },
+        {
+            id: 2,
+            Icon: FiUsers,
+            label: 'followers',
+            value: followers,
+            color: 'green',
+        },
+        {
+            id: 3,
+            Icon: FiUserPlus,
+            label: 'following',
+            value: following,
+            color: 'purple',
+        },
+        {
+            id: 4,
+            Icon: GoGist,
+            label: 'gists',
+            value: public_gists,
+            color: 'yellow',
+        },
+    ]
+
+    return (
+        <section className='section'>
+            <Wrapper className='section-center'>
+                {items.map(item => (
+                    <Item key={item.id} {...item} />
+                ))}
+            </Wrapper>
+        </section>
+    )
+}
+
+const Item: FC<ItemT> = ({ Icon, label, value, color }) => {
+    return (
+        <article className='item'>
+            <span className={color}>
+                <Icon className='icon' />
+            </span>
+            <div>
+                <h3>{value}</h3>
+                <p>{label}</p>
+            </div>
+        </article>
+    )
 }
 
 export default UserInfo

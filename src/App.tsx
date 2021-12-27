@@ -1,13 +1,13 @@
 import { Dashboard, Login, PrivateRoute, AuthWrapper, Error } from './pages'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
     return (
-        <div>
-            <Dashboard></Dashboard>
-            <Login />
-            <Error />
-        </div>
+        <Routes>
+            <Route path='/' element={<Dashboard />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='*' element={<Error />} />
+        </Routes>
     )
 }
 

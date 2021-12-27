@@ -1,7 +1,17 @@
+import { Info, Navbar, Repos, Search, User } from '../components'
+
 interface DashboardProps {}
 
 const Dashboard: React.FC<DashboardProps> = ({}) => {
-    return <h2>Dashboard page</h2>
+    return (
+        <main>
+            <Navbar />
+            <Search />
+            <Info />
+            <User />
+            <Repos />
+        </main>
+    )
 }
 
 export default Dashboard

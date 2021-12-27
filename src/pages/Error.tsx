@@ -19,7 +19,17 @@ const Wrapper = styled.section`
 interface ErrorProps {}
 
 const Error: React.FC<ErrorProps> = ({}) => {
-    return <h2>error page</h2>
+    return (
+        <Wrapper>
+            <div>
+                <h1>404</h1>
+                <h3>sorry, the page you tried cannot be found</h3>
+                <Link to='/' className='btn'>
+                    back home
+                </Link>
+            </div>
+        </Wrapper>
+    )
 }
 
 export default Error
