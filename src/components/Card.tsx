@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { MdBusiness, MdLocationOn, MdLink } from 'react-icons/md'
+import { useGithubContext } from '../context/context'
 
 const Wrapper = styled.article`
     background: var(--clr-white);
@@ -84,7 +85,44 @@ const Wrapper = styled.article`
 interface CardProps {}
 
 const Card: React.FC<CardProps> = ({}) => {
-    return <h2>card component</h2>
+    const { githubUser } = useGithubContext()
+    const {
+        avatar_url,
+        html_url,
+        name,
+        company,
+        blog,
+        bio,
+        location,
+        twitter_username,
+    } = githubUser
+
+    return (
+        <Wrapper>
+            <header>
+                <img src={avatar_url} alt={name} />
+                <div>
+                    <h4>{name}</h4>
+                    <p>@{twitter_username ?? 'tuna-kai'}</p>
+                </div>
+                <a href={html_url}>follow</a>
+                <p className='bio'>{bio}</p>
+                <div className='links'>
+                    <p>
+                        <MdBusiness />
+                        {company}
+                    </p>
+                    <p>
+                        <MdLocationOn />
+                        {location}
+                    </p>
+                    <a href={`https://${blog}`}>
+                        <MdLink /> {blog}
+                    </a>
+                </div>
+            </header>
+        </Wrapper>
+    )
 }
 
 export default Card

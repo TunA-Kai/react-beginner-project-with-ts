@@ -15,7 +15,14 @@ const Wrapper = styled.div`
 interface UserProps {}
 
 const User: React.FC<UserProps> = ({}) => {
-    return <> User components </>
+    return (
+        <section className='section'>
+            <Wrapper className='section-center'>
+                <Card />
+                <Followers />
+            </Wrapper>
+        </section>
+    )
 }
 
 export default User

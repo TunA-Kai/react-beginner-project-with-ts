@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useGithubContext } from '../context/context'
 
 const Wrapper = styled.article`
     background: var(--clr-white);
@@ -55,7 +56,26 @@ const Wrapper = styled.article`
 interface FollowersProps {}
 
 const Followers: React.FC<FollowersProps> = ({}) => {
-    return <> Followers components </>
+    const { followers } = useGithubContext()
+
+    return (
+        <Wrapper>
+            <div className='followers'>
+                {followers.map((follower: any, index: number) => {
+                    const { avatar_url: img, html_url, login } = follower
+                    return (
+                        <article key={index}>
+                            <img src={img} alt={login} />
+                            <div>
+                                <h4>{login}</h4>
+                                <a href={html_url}>{html_url}</a>
+                            </div>
+                        </article>
+                    )
+                })}
+            </div>
+        </Wrapper>
+    )
 }
 
 export default Followers
