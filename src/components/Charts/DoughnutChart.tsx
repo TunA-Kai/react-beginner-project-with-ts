@@ -7,16 +7,16 @@ import {
     ChartData,
     Title,
 } from 'chart.js'
-import { Pie } from 'react-chartjs-2'
+import { Doughnut } from 'react-chartjs-2'
 import { useGithubContext } from '../../context/context'
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title)
 
-const options: ChartOptions<'pie'> = {
+const options: ChartOptions<'doughnut'> = {
     plugins: {
         title: {
             display: true,
-            text: 'Most Used Languages',
+            text: 'Stars Per Language',
             color: '#000',
             font: {
                 size: 24,
@@ -28,7 +28,7 @@ const options: ChartOptions<'pie'> = {
                 label(context) {
                     // console.log(context)
                     const { formattedValue } = context
-                    return `${formattedValue} projects`
+                    return `${formattedValue} stars`
                 },
                 title(context) {
                     const { label } = context[0]
@@ -46,26 +46,33 @@ const options: ChartOptions<'pie'> = {
     },
 }
 
-interface PieChartProps {}
+interface DoughnutChartProps {}
 
-const PieChart: React.FC<PieChartProps> = ({}) => {
+const DoughnutChart: React.FC<DoughnutChartProps> = ({}) => {
     const { repos } = useGithubContext()
-    const languageUsed: { [key: string]: number } = {}
-    repos.forEach(({ language }: { language: string }) => {
-        if (!language) return
+    const languageStars: { [key: string]: number } = {}
+    repos.forEach(
+        ({
+            language,
+            stargazers_count: stars,
+        }: {
+            stargazers_count: string
+            language: string
+        }) => {
+            if (!language) return
 
-        languageUsed[language]
-            ? languageUsed[language]++
-            : (languageUsed[language] = 1)
-    })
-    // console.log(languageUsed)
+            languageStars[language]
+                ? (languageStars[language] += Number(stars))
+                : (languageStars[language] = 1)
+        },
+    )
 
-    const chartData: ChartData<'pie', number[], string> = {
-        labels: Object.keys(languageUsed),
+    const data: ChartData<'doughnut', number[], string> = {
+        labels: Object.keys(languageStars),
         datasets: [
             {
-                label: 'languages',
-                data: Object.values(languageUsed),
+                label: '# of Stars',
+                data: Object.values(languageStars),
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -96,9 +103,9 @@ const PieChart: React.FC<PieChartProps> = ({}) => {
                 backgroundColor: 'white',
             }}
         >
-            <Pie data={chartData} options={options} />
+            <Doughnut data={data} options={options} />
         </div>
     )
 }
 
-export default PieChart
+export default DoughnutChart
