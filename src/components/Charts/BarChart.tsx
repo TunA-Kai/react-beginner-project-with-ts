@@ -15,6 +15,7 @@ import { useGithubContext } from '../../context/context'
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const options: ChartOptions<'bar'> = {
+    indexAxis: 'y',
     layout: {
         padding: {
             left: 20,
@@ -25,7 +26,7 @@ const options: ChartOptions<'bar'> = {
         x: {
             title: {
                 display: true,
-                text: 'Repo name',
+                text: 'Forks',
                 color: '#000',
                 font: {
                     size: 16,
@@ -36,7 +37,7 @@ const options: ChartOptions<'bar'> = {
         y: {
             title: {
                 display: true,
-                text: 'Stars',
+                text: 'Repo name',
                 color: '#000',
                 font: {
                     size: 16,
@@ -52,7 +53,7 @@ const options: ChartOptions<'bar'> = {
         },
         title: {
             display: true,
-            text: 'Most Popular',
+            text: 'Most Forked',
             color: '#000',
             padding: {
                 bottom: 20,
@@ -64,33 +65,28 @@ const options: ChartOptions<'bar'> = {
     },
 }
 
-interface ColumnProps {}
-interface RepoStars {
+interface BarChartProps {}
+interface RepoForks {
     name: string
-    stars: number
+    forks: number
 }
 
-const Column: React.FC<ColumnProps> = ({}) => {
+const BarChart: React.FC<BarChartProps> = ({}) => {
     const { repos } = useGithubContext()
-    const repoStars: RepoStars[] = repos
-        .map(
-            ({
-                name,
-                stargazers_count,
-            }: {
-                name: string
-                stargazers_count: string
-            }) => ({ name, stars: stargazers_count }),
-        )
-        .sort((a: RepoStars, b: RepoStars) => b.stars - a.stars)
+    const repoStars: RepoForks[] = repos
+        .map(({ name, forks }: { name: string; forks: string }) => ({
+            name,
+            forks,
+        }))
+        .sort((a: RepoForks, b: RepoForks) => b.forks - a.forks)
         .slice(0, 5)
 
     const data: ChartData<'bar', number[], string> = {
         labels: repoStars.map(({ name }) => name),
         datasets: [
             {
-                label: 'stars',
-                data: repoStars.map(({ stars }) => stars),
+                label: 'forks',
+                data: repoStars.map(({ forks }) => forks),
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(255, 159, 64, 0.2)',
@@ -129,4 +125,4 @@ const Column: React.FC<ColumnProps> = ({}) => {
     )
 }
 
-export default Column
+export default BarChart

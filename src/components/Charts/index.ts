@@ -1,6 +1,6 @@
 import ExampleChart from './ExampleChart'
 import Column from './Column'
-import Bar from './Bar'
+import Bar from './BarChart'
 import Pie from './PieChart'
 import Doughnut from './DoughnutChart'
 

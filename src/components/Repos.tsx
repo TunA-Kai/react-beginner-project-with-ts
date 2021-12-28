@@ -26,9 +26,10 @@ const Repos: React.FC<ReposProps> = ({}) => {
     return (
         <section className='section'>
             <Wrapper className='section-center'>
-                {/* <ExampleChart /> */}
                 <Pie />
+                <Column />
                 <Doughnut />
+                <Bar />
             </Wrapper>
         </section>
     )
