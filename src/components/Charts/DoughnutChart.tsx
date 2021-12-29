@@ -1,16 +1,6 @@
-import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-    ChartOptions,
-    ChartData,
-    Title,
-} from 'chart.js'
+import { ChartOptions, ChartData } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 import { useGithubContext } from '../../context/context'
-
-ChartJS.register(ArcElement, Tooltip, Legend, Title)
 
 const options: ChartOptions<'doughnut'> = {
     plugins: {

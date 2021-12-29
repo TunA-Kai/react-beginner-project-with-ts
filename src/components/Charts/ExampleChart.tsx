@@ -1,15 +1,5 @@
-import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-    ChartOptions,
-    ChartData,
-    Title,
-} from 'chart.js'
+import { ChartOptions, ChartData } from 'chart.js'
 import { ChartProps, Pie } from 'react-chartjs-2'
-
-ChartJS.register(ArcElement, Tooltip, Legend, Title)
 
 interface ExampleChartProps {}
 

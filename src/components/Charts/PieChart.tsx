@@ -1,16 +1,6 @@
-import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-    ChartOptions,
-    ChartData,
-    Title,
-} from 'chart.js'
+import { ChartOptions, ChartData } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
 import { useGithubContext } from '../../context/context'
-
-ChartJS.register(ArcElement, Tooltip, Legend, Title)
 
 const options: ChartOptions<'pie'> = {
     plugins: {
@@ -54,7 +44,7 @@ const PieChart: React.FC<PieChartProps> = ({}) => {
     repos.forEach(({ language }: { language: string }) => {
         if (!language) return
 
-        languageUsed[language]
+        language in languageUsed
             ? languageUsed[language]++
             : (languageUsed[language] = 1)
     })
