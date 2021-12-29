@@ -87,14 +87,14 @@ const ErrorWrapper = styled.article`
 interface SearchProps {}
 
 const Search: React.FC<SearchProps> = ({}) => {
-    const { remainRequest, error, searchGithubUser, loading } =
+    const { remainRequest, error, searchGithubUser, status } =
         useGithubContext()
     const [user, setUser] = useState('')
 
     return (
         <section className='section'>
             <Wrapper className='section-center'>
-                {error && (
+                {status === 'error' && (
                     <ErrorWrapper>
                         <p>{error}</p>
                     </ErrorWrapper>
@@ -108,7 +108,7 @@ const Search: React.FC<SearchProps> = ({}) => {
                             value={user}
                             onChange={e => setUser(e.target.value)}
                         />
-                        {remainRequest > 0 && !loading && (
+                        {remainRequest > 0 && status !== 'pending' && (
                             <button type='submit'>Search</button>
                         )}
                     </div>

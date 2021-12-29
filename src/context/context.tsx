@@ -2,34 +2,33 @@ import mockUser from './mockData/mockUser'
 import mockRepos from './mockData/mockRepos'
 import mockFollowers from './mockData/mockFollowers'
 import axios from 'axios'
-import { createContext, FC, useContext, useEffect, useState } from 'react'
-import { GithubContextT } from '../types'
+import { createContext, FC, useContext, useEffect, useReducer } from 'react'
+import { GithubContextT, TAction, TStatus } from '../types'
+import { githubReducer } from './reducer'
 
 const rootUrl = 'https://api.github.com'
 
 const GithubContext = createContext({} as GithubContextT)
 
+const initialState = {
+    githubUser: mockUser,
+    repos: mockRepos,
+    followers: mockFollowers,
+    remainRequest: 60,
+    status: 'idle' as TStatus,
+    error: '',
+}
+
 const GithubProvider: FC = ({ children }) => {
-    const [githubUser, setGithubUser] = useState(mockUser)
-    const [repos, setRepos] = useState(mockRepos)
-    const [followers, setFollowers] = useState(mockFollowers)
-    const [remainRequest, setRemainRequest] = useState(60)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
+    const [githubState, dispatch] = useReducer(githubReducer, initialState)
 
     const context: GithubContextT = {
-        githubUser,
-        repos,
-        followers,
-        remainRequest,
-        error,
+        ...githubState,
         searchGithubUser,
-        loading,
     }
 
     async function searchGithubUser(user: string) {
-        setLoading(true)
-        setError('')
+        dispatch({ type: TAction.GET_DATA })
         try {
             const { data } = await axios.get(`${rootUrl}/users/${user}`)
             const { login, followers_url } = data
@@ -37,14 +36,20 @@ const GithubProvider: FC = ({ children }) => {
                 axios.get(`${rootUrl}/users/${login}/repos?per_page=100`),
                 axios.get(`${followers_url}?per_page=100`),
             ])
-            setGithubUser(data)
-            setFollowers(followers)
-            setRepos(repos)
-            setError('')
+            dispatch({
+                type: TAction.SHOW_DATA,
+                payload: { githubUser: data, repos, followers },
+            })
         } catch (error: any) {
-            setError('Cannot find user with that username')
+            if (error.response) {
+                dispatch({
+                    type: TAction.SHOW_ERROR,
+                    payload: {
+                        error: `Cannot find any user with username: ${user}`,
+                    },
+                })
+            }
         } finally {
-            setLoading(false)
             checkRequests()
         }
     }
@@ -56,15 +61,17 @@ const GithubProvider: FC = ({ children }) => {
                     rate: { remaining },
                 },
             } = await axios.get(`${rootUrl}/rate_limit`)
-            // console.log(remaining)
-            setRemainRequest(remaining)
             if (remaining === 0)
                 throw new Error('There is no request left 💥💥💥')
-            // setError('')
+            dispatch({ type: TAction.UPDATE_REQUEST, remainRequest: remaining })
         } catch (error: any) {
-            setError(error.message)
-        } finally {
-            setLoading(false)
+            dispatch({
+                type: TAction.SHOW_ERROR,
+                payload: {
+                    isRunoutRequest: true,
+                    error: error.message,
+                },
+            })
         }
     }
 

@@ -5,9 +5,9 @@ import { ReactComponent as Spinner } from '../images/spinner.svg'
 interface DashboardProps {}
 
 const Dashboard: React.FC<DashboardProps> = ({}) => {
-    const { loading } = useGithubContext()
+    const { status } = useGithubContext()
 
-    if (loading) {
+    if (status === 'pending') {
         return (
             <main>
                 <Navbar />
