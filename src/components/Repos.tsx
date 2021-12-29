@@ -15,9 +15,6 @@ const Wrapper = styled.div`
     div {
         width: 100% !important;
     }
-    .fusioncharts-container {
-        width: 100% !important;
-    }
 `
 
 interface ReposProps {}

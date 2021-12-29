@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { MdSearch } from 'react-icons/md'
-// import { GithubContext } from '../context/context'
+import { useState } from 'react'
+import { useGithubContext } from '../context/context'
 
 const Wrapper = styled.div`
     position: relative;
@@ -86,7 +87,42 @@ const ErrorWrapper = styled.article`
 interface SearchProps {}
 
 const Search: React.FC<SearchProps> = ({}) => {
-    return <> Search components </>
+    const { remainRequest, error, searchGithubUser, loading } =
+        useGithubContext()
+    const [user, setUser] = useState('')
+
+    return (
+        <section className='section'>
+            <Wrapper className='section-center'>
+                {error && (
+                    <ErrorWrapper>
+                        <p>{error}</p>
+                    </ErrorWrapper>
+                )}
+                <form onSubmit={handleSubmit}>
+                    <div className='form-control'>
+                        <MdSearch />
+                        <input
+                            type='text'
+                            placeholder='enter github user'
+                            value={user}
+                            onChange={e => setUser(e.target.value)}
+                        />
+                        {remainRequest > 0 && !loading && (
+                            <button type='submit'>Search</button>
+                        )}
+                    </div>
+                </form>
+                <h3>requests : {remainRequest} / 60</h3>
+            </Wrapper>
+        </section>
+    )
+
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        if (!user.trim()) return
+        searchGithubUser(user)
+    }
 }
 
 export default Search
