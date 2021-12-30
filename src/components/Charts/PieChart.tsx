@@ -40,14 +40,19 @@ interface PieChartProps {}
 
 const PieChart: React.FC<PieChartProps> = ({}) => {
     const { repos } = useGithubContext()
-    const languageUsed: { [key: string]: number } = {}
+    const tempLanguageUsed: { [key: string]: number } = {}
     repos.forEach(({ language }: { language: string }) => {
         if (!language) return
 
-        language in languageUsed
-            ? languageUsed[language]++
-            : (languageUsed[language] = 1)
+        language in tempLanguageUsed
+            ? tempLanguageUsed[language]++
+            : (tempLanguageUsed[language] = 1)
     })
+    const languageUsed = Object.fromEntries(
+        Object.entries(tempLanguageUsed)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5),
+    )
     // console.log(languageUsed)
 
     const chartData: ChartData<'pie', number[], string> = {

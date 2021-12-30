@@ -40,7 +40,7 @@ interface DoughnutChartProps {}
 
 const DoughnutChart: React.FC<DoughnutChartProps> = ({}) => {
     const { repos } = useGithubContext()
-    const languageStars: { [key: string]: number } = {}
+    const tempLanguageStars: { [key: string]: number } = {}
     repos.forEach(
         ({
             language,
@@ -51,10 +51,16 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({}) => {
         }) => {
             if (!language) return
 
-            languageStars[language]
-                ? (languageStars[language] += Number(stars))
-                : (languageStars[language] = 1)
+            tempLanguageStars[language]
+                ? (tempLanguageStars[language] += Number(stars))
+                : (tempLanguageStars[language] = 1)
         },
+    )
+
+    const languageStars = Object.fromEntries(
+        Object.entries(tempLanguageStars)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5),
     )
 
     const data: ChartData<'doughnut', number[], string> = {
