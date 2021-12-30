@@ -1,4 +1,4 @@
-import { signInWithPopup } from 'firebase/auth'
+import { signInAnonymously, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 import { auth, provider } from '../firebase-config'
 
@@ -17,6 +17,14 @@ const Login: React.FC<LoginProps> = ({ setIsAuth }) => {
         })
     }
 
+    function signInAnonymous() {
+        signInAnonymously(auth).then(() => {
+            localStorage.setItem('isAuth', 'true')
+            setIsAuth(true)
+            navigate('/')
+        })
+    }
+
     return (
         <div className='loginPage'>
             <p>Sign In</p>
@@ -25,6 +33,9 @@ const Login: React.FC<LoginProps> = ({ setIsAuth }) => {
                 onClick={signInWithGoogle}
             >
                 Sign in with Google
+            </button>
+            <button onClick={signInAnonymous} className='login-with-google-btn'>
+                Sign in as guest
             </button>
         </div>
     )
