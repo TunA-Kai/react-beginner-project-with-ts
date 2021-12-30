@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 import loginImg from '../images/login-img.svg'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import { useState } from 'react'
+import { auth, uiConfig } from '../firebase-config'
+import { useGithubContext } from '../context/context'
 
 const Wrapper = styled.section`
     min-height: 100vh;
@@ -21,12 +25,24 @@ const Wrapper = styled.section`
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = ({}) => {
+    const [isLogin, setIsLogin] = useState(false)
+
     return (
         <Wrapper>
             <div className='container'>
                 <img src={loginImg} alt='github user' />
                 <h1>github user</h1>
-                <button className='btn'>login</button>
+
+                {isLogin ? (
+                    <StyledFirebaseAuth
+                        uiConfig={uiConfig}
+                        firebaseAuth={auth}
+                    />
+                ) : (
+                    <button className='btn' onClick={() => setIsLogin(true)}>
+                        login
+                    </button>
+                )}
             </div>
         </Wrapper>
     )

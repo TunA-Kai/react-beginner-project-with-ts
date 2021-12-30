@@ -2,9 +2,19 @@ import mockUser from './mockData/mockUser'
 import mockRepos from './mockData/mockRepos'
 import mockFollowers from './mockData/mockFollowers'
 import axios from 'axios'
-import { createContext, FC, useContext, useEffect, useReducer } from 'react'
+import {
+    createContext,
+    FC,
+    useContext,
+    useEffect,
+    useReducer,
+    useState,
+} from 'react'
 import { GithubContextT, TAction, TStatus } from '../types'
 import { githubReducer } from './reducer'
+import { onAuthStateChanged, User } from 'firebase/auth'
+import { auth } from '../firebase-config'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const rootUrl = 'https://api.github.com'
 
@@ -20,10 +30,17 @@ const initialState = {
 }
 
 const GithubProvider: FC = ({ children }) => {
+    console.log('GithubProvider')
     const [githubState, dispatch] = useReducer(githubReducer, initialState)
+    const [user, setUser] = useState<User | null>(null)
+    const location = useLocation()
+    const navigate = useNavigate()
+    console.log(user)
+    console.log(location.pathname)
 
     const context: GithubContextT = {
         ...githubState,
+        user,
         searchGithubUser,
     }
 
@@ -75,8 +92,17 @@ const GithubProvider: FC = ({ children }) => {
         }
     }
 
+    // useEffect(() => {
+    //     checkRequests()
+    // }, [])
+
     useEffect(() => {
-        checkRequests()
+        const unsubAuth = onAuthStateChanged(auth, user => {
+            console.log('user status changed:', user)
+            setUser(user)
+            navigate('/')
+        })
+        return unsubAuth
     }, [])
 
     return (

@@ -103,7 +103,7 @@ const Card: React.FC<CardProps> = ({}) => {
                 <img src={avatar_url} alt={name} />
                 <div>
                     <h4>{name}</h4>
-                    <p>@{twitter_username ?? 'tuna-kai'}</p>
+                    <p>@{twitter_username ?? ''}</p>
                 </div>
                 <a href={html_url}>follow</a>
                 <p className='bio'>{bio}</p>

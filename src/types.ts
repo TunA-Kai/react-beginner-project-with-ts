@@ -1,3 +1,5 @@
+import { User } from 'firebase/auth'
+
 export enum TAction {
     GET_DATA = 'GET_DATA',
     UPDATE_REQUEST = 'UPDATE_REQUEST',
@@ -30,4 +32,5 @@ export interface GithubState {
 
 export interface GithubContextT extends GithubState {
     searchGithubUser(user: string): Promise<void>
+    user: User | null
 }
