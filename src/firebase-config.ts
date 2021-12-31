@@ -1,7 +1,6 @@
 import firebase from 'firebase/compat/app'
-import { getAuth } from 'firebase/auth'
+import { EmailAuthProvider, getAuth, GoogleAuthProvider } from 'firebase/auth'
 import 'firebase/compat/auth'
-import * as firebaseui from 'firebaseui'
 
 // Configure Firebase.
 const config = {
@@ -16,17 +15,5 @@ const config = {
 const app = firebase.initializeApp(config)
 
 export const auth = getAuth(app)
-
-// Configure FirebaseUI.
-export const uiConfig = {
-    // Popup signin flow rather than redirect flow.
-    signInFlow: 'popup',
-    // Redirect to / after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    // signInSuccessUrl: '/',
-    // We will display Google and Facebook as auth providers.
-    signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
-    ],
-}
+export const googleProvider = new GoogleAuthProvider()
+export const emailProvider = new EmailAuthProvider()

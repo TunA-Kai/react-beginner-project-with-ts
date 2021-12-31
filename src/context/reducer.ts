@@ -34,5 +34,15 @@ export function githubReducer(
                 status: 'success',
             }
         }
+        case TAction.LOGGING_IN:
+            return {
+                ...state,
+                isAuth: true,
+            }
+        case TAction.LOGGING_OUT:
+            return {
+                ...state,
+                isAuth: false,
+            }
     }
 }

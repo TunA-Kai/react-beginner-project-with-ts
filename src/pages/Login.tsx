@@ -1,9 +1,11 @@
 import styled from 'styled-components'
 import loginImg from '../images/login-img.svg'
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import { useState } from 'react'
-import { auth, uiConfig } from '../firebase-config'
+import { auth, emailProvider, googleProvider } from '../firebase-config'
 import { useGithubContext } from '../context/context'
+import { signInAnonymously, signInWithPopup } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
+import { TAction } from '../types'
 
 const Wrapper = styled.section`
     min-height: 100vh;
@@ -26,6 +28,8 @@ interface LoginProps {}
 
 const Login: React.FC<LoginProps> = ({}) => {
     const [isLogin, setIsLogin] = useState(false)
+    const { dispatch } = useGithubContext()
+    const navigate = useNavigate()
 
     return (
         <Wrapper>
@@ -34,10 +38,15 @@ const Login: React.FC<LoginProps> = ({}) => {
                 <h1>github user</h1>
 
                 {isLogin ? (
-                    <StyledFirebaseAuth
-                        uiConfig={uiConfig}
-                        firebaseAuth={auth}
-                    />
+                    <>
+                        <button onClick={googleSignIn}>
+                            Login with google
+                        </button>
+                        <button onClick={emailSignIn}>Login with email</button>
+                        <button onClick={anonymousSignIn}>
+                            Login as guest
+                        </button>
+                    </>
                 ) : (
                     <button className='btn' onClick={() => setIsLogin(true)}>
                         login
@@ -46,6 +55,24 @@ const Login: React.FC<LoginProps> = ({}) => {
             </div>
         </Wrapper>
     )
+
+    function googleSignIn() {
+        signInWithPopup(auth, googleProvider).then(loggingIn)
+    }
+
+    function emailSignIn() {
+        signInWithPopup(auth, emailProvider).then(loggingIn)
+    }
+
+    function anonymousSignIn() {
+        signInAnonymously(auth).then(loggingIn)
+    }
+
+    function loggingIn() {
+        dispatch({ type: TAction.LOGGING_IN })
+        localStorage.setItem('isAuth', 'true')
+        navigate('/')
+    }
 }
 
 export default Login

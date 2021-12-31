@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useGithubContext } from '../context/context'
 import { auth } from '../firebase-config'
+import { TAction } from '../types'
 
 const Wrapper = styled.nav`
     padding: 1.5rem;
@@ -39,12 +40,13 @@ interface NavbarProps {}
 
 const Navbar: React.FC<NavbarProps> = ({}) => {
     const navigate = useNavigate()
-    const { user } = useGithubContext()
+    const { dispatch } = useGithubContext()
 
     return (
         <Wrapper>
             <h4>
-                Welcome <strong>{user?.displayName}</strong>{' '}
+                Welcome{' '}
+                <strong>{auth.currentUser?.displayName ?? 'Guest'}</strong>{' '}
             </h4>
             <button onClick={handleSignOut}>sign out</button>
         </Wrapper>
@@ -52,6 +54,8 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
 
     function handleSignOut() {
         signOut(auth).then(_ => {
+            dispatch({ type: TAction.LOGGING_OUT })
+            localStorage.setItem('isAuth', 'false')
             navigate('/login')
         })
     }
