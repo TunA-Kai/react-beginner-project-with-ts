@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { TPizza } from '../App'
+import { containerVariants } from './Base'
 
 interface ToppingsProps {
     addTopping(topping: string): void
@@ -17,7 +19,13 @@ function Toppings({ addTopping, pizza }: ToppingsProps) {
     ]
 
     return (
-        <div className='toppings container'>
+        <motion.div
+            variants={containerVariants}
+            initial='hidden'
+            animate='visible'
+            exit='exit'
+            className='toppings container'
+        >
             <h3>Step 2: Choose Toppings</h3>
             <ul>
                 {toppings.map(topping => {
@@ -25,17 +33,34 @@ function Toppings({ addTopping, pizza }: ToppingsProps) {
                         ? 'active'
                         : ''
                     return (
-                        <li key={topping} onClick={() => addTopping(topping)}>
+                        <motion.li
+                            whileHover={{
+                                scale: 1.3,
+                                color: '#f8e112',
+                                originX: 0,
+                            }}
+                            transition={{ type: 'spring', stiffness: 300 }}
+                            key={topping}
+                            onClick={() => addTopping(topping)}
+                        >
                             <span className={spanClass}>{topping}</span>
-                        </li>
+                        </motion.li>
                     )
                 })}
             </ul>
 
             <Link to='/order'>
-                <button>Order</button>
+                <motion.button
+                    whileHover={{
+                        scale: 1.1,
+                        textShadow: '0px 0px 8px rgb(255,255,255)',
+                        boxShadow: '0px 0px 8px rgb(255,255,255)',
+                    }}
+                >
+                    Order
+                </motion.button>
             </Link>
-        </div>
+        </motion.div>
     )
 }
 

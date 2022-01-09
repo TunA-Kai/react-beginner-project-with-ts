@@ -1,6 +1,7 @@
 import { Base, Header, Home, Order, Toppings } from './components'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 
 export interface TPizza {
     base: string
@@ -9,6 +10,7 @@ export interface TPizza {
 
 function App() {
     const [pizza, setPizza] = useState<TPizza>({ base: '', toppings: [] })
+    const location = useLocation()
 
     function addBase(base: string) {
         setPizza({ ...pizza, base })
@@ -27,18 +29,23 @@ function App() {
     return (
         <>
             <Header />
-            <Routes>
-                <Route
-                    path='/base'
-                    element={<Base addBase={addBase} pizza={pizza} />}
-                />
-                <Route
-                    path='/toppings'
-                    element={<Toppings addTopping={addTopping} pizza={pizza} />}
-                />
-                <Route path='/order' element={<Order pizza={pizza} />} />
-                <Route path='/' element={<Home />} />
-            </Routes>
+
+            <AnimatePresence exitBeforeEnter>
+                <Routes location={location} key={location.pathname}>
+                    <Route
+                        path='/base'
+                        element={<Base addBase={addBase} pizza={pizza} />}
+                    />
+                    <Route
+                        path='/toppings'
+                        element={
+                            <Toppings addTopping={addTopping} pizza={pizza} />
+                        }
+                    />
+                    <Route path='/order' element={<Order pizza={pizza} />} />
+                    <Route path='/' element={<Home />} />
+                </Routes>
+            </AnimatePresence>
         </>
     )
 }

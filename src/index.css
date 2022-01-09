@@ -33,6 +33,7 @@ body {
         rgba(62, 20, 86, 1) 100%
     );
     overflow: hidden;
+    position: relative;
 }
 button {
     color: white;
@@ -115,4 +116,45 @@ li span.active::before {
 }
 .order p {
     margin: 20px auto;
+}
+
+/* modal */
+.backdrop {
+    position: fixed;
+    top: -50vw;
+    left: -60vh;
+    width: 200vw;
+    height: 200vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+.modal {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 400px;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 2;
+}
+.modal button {
+    color: #444;
+    border-color: #444;
+    font-weight: bold;
+    margin-top: 20px;
+}
+.modal p {
+    color: #444;
+    font-weight: bold;
+}
+
+/* loader */
+.loader {
+    width: 10px;
+    height: 10px;
+    margin: 40px auto;
+    border-radius: 50%;
+    background: #fff;
 }
