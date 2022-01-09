@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion, TargetAndTransition } from 'framer-motion'
 import { containerVariants } from './Base'
+import Loader from './Loader'
 
 const buttonVariants: { hover: TargetAndTransition } = {
     hover: {
@@ -28,6 +29,7 @@ function Home({}: HomeProps) {
                     Create Your Pizza
                 </motion.button>
             </Link>
+            <Loader />
         </motion.div>
     )
 }
