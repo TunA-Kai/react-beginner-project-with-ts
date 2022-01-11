@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { motion, TargetAndTransition } from 'framer-motion'
+import { motion, TargetAndTransition, Variants } from 'framer-motion'
 import { containerVariants } from './Base'
 import Loader from './Loader'
 
-const buttonVariants: { hover: TargetAndTransition } = {
+const buttonVariants: Variants = {
     hover: {
         scale: 1.1,
         textShadow: '0px 0px 8px rgb(255,255,255)',

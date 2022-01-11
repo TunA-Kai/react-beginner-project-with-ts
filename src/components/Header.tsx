@@ -1,6 +1,7 @@
-import { motion } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
+import { useRef } from 'react'
 
-const svgVariants = {
+const svgVariants: Variants = {
     hidden: { rotate: -180 },
     visible: { rotate: 0, transition: { duration: 1 } },
 }
@@ -21,9 +22,16 @@ const pathVariants = {
 }
 
 function Header() {
+    const logoref = useRef<HTMLDivElement>(null)
+
     return (
         <header>
-            <div className='logo'>
+            <motion.div
+                ref={logoref}
+                className='logo'
+                drag
+                dragConstraints={logoref}
+            >
                 <motion.svg
                     className='pizza-svg'
                     xmlns='http://www.w3.org/2000/svg'
@@ -43,7 +51,7 @@ function Header() {
                         d='M50 30 L50 -10 C50 -10 90 -10 90 30 Z'
                     />
                 </motion.svg>
-            </div>
+            </motion.div>
             <motion.div
                 initial={{ y: -250 }}
                 animate={{ y: -10 }}
