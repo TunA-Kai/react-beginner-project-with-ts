@@ -1,10 +1,35 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import logo from '../assets/logo.svg'
+import { FaBars } from 'react-icons/fa'
+import { links } from '../utils/constants'
+import { CartButtons } from '.'
 
 interface NavbarProps {}
 
 function Navbar({}: NavbarProps) {
-    return <>Navbar Component</>
+    return (
+        <NavContainer>
+            <div className='nav-center'>
+                <div className='nav-header'>
+                    <Link to='/'>
+                        <img src={logo} alt='Comfy sloth' />
+                    </Link>
+                    <button className='nav-toggle'>
+                        <FaBars />
+                    </button>
+                </div>
+                <ul className='nav-links'>
+                    {links.map(({ id, text, url }) => (
+                        <li key={id}>
+                            <Link to={url}>{text}</Link>
+                        </li>
+                    ))}
+                </ul>
+                <CartButtons />
+            </div>
+        </NavContainer>
+    )
 }
 
 export default Navbar
