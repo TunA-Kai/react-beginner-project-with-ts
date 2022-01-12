@@ -4,10 +4,12 @@ import logo from '../assets/logo.svg'
 import { FaBars } from 'react-icons/fa'
 import { links } from '../utils/constants'
 import { CartButtons } from '.'
+import { useProductsContext } from '../context/productsContext'
 
 interface NavbarProps {}
 
 function Navbar({}: NavbarProps) {
+    const { openSidebar } = useProductsContext()
     return (
         <NavContainer>
             <div className='nav-center'>
@@ -15,7 +17,7 @@ function Navbar({}: NavbarProps) {
                     <Link to='/'>
                         <img src={logo} alt='Comfy sloth' />
                     </Link>
-                    <button className='nav-toggle'>
+                    <button className='nav-toggle' onClick={openSidebar}>
                         <FaBars />
                     </button>
                 </div>

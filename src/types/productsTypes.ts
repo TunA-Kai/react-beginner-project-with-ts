@@ -1,4 +1,6 @@
-interface TProductsState {}
+interface TProductsState {
+    isSidebarOpen: boolean
+}
 
 type TProductsAction =
     | { type: 'SIDEBAR_OPEN' }
