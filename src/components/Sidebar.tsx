@@ -1,9 +1,36 @@
 import styled from 'styled-components'
+import logo from '../assets/logo.svg'
+import { FaTimes } from 'react-icons/fa'
+import { links } from '../utils/constants'
+import { Link } from 'react-router-dom'
+import { CartButtons } from '.'
 
 interface SidebarProps {}
 
 function Sidebar({}: SidebarProps) {
-    return <>Sidebar Component</>
+    return (
+        <SidebarContainer>
+            <aside className={`${false ? 'show-sidebar' : ''} sidebar`}>
+                <div className='sidebar-header'>
+                    <img src={logo} alt='comfy sloth' className='logo' />
+                    <button className='close-btn' type='button'>
+                        <FaTimes />
+                    </button>
+                </div>
+                <ul className='links'>
+                    {links.map(({ id, text, url }) => (
+                        <li key={id}>
+                            <Link to={url}>{text}</Link>
+                        </li>
+                    ))}
+                    <li>
+                        <Link to='/checkout'>checkout</Link>
+                    </li>
+                </ul>
+                <CartButtons />
+            </aside>
+        </SidebarContainer>
+    )
 }
 
 export default Sidebar
