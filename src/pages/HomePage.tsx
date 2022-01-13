@@ -1,8 +1,6 @@
 import { Contact, FeaturedProducts, Hero, Services } from '../components'
 
-interface HomePageProps {}
-
-function HomePage({}: HomePageProps) {
+function HomePage() {
     return (
         <main>
             <Hero />

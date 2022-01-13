@@ -1,7 +1,11 @@
 interface LoadingProps {}
 
 function Loading({}: LoadingProps) {
-    return <>Loading Component</>
+    return (
+        <div className='section section-center'>
+            <div className='loading'></div>
+        </div>
+    )
 }
 
 export default Loading

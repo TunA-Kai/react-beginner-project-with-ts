@@ -18,6 +18,7 @@ function productsReducer(
             return { ...state, status: 'success', products, featuredProducts }
         }
         case 'GET_PRODUCTS_ERROR':
+        case 'GET_SINGLE_PRODUCTS_ERROR':
             return { ...state, status: 'reject', error: action.errorMessage }
     }
     return state

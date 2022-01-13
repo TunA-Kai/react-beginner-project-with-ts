@@ -1,9 +1,25 @@
 import styled from 'styled-components'
+import { Loading, Error } from '.'
+import { useProductsContext } from '../context/productsContext'
+import Product from './Product'
 
-interface FeaturedProductsProps {}
-
-function FeaturedProducts({}: FeaturedProductsProps) {
-    return <>FeaturedProducts Component</>
+function FeaturedProducts() {
+    const { status, featuredProducts } = useProductsContext()
+    if (status === 'loading') return <Loading />
+    if (status === 'reject') return <Error />
+    return (
+        <Wrapper className='section'>
+            <div className='title'>
+                <h2>featured products</h2>
+                <div className='underline'></div>
+            </div>
+            <div className='section-center featured'>
+                {featuredProducts.map(p => (
+                    <Product key={p.id} {...p} />
+                ))}
+            </div>
+        </Wrapper>
+    )
 }
 
 export default FeaturedProducts

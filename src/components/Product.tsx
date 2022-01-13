@@ -1,9 +1,26 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { TProduct } from '../types/productsTypes'
+import { FaSearch } from 'react-icons/fa'
+import { formatPrice } from '../utils/helpers'
 
-interface ProductProps {}
+interface ProductProps extends TProduct {}
 
-function Product({}: ProductProps) {
-    return <>Product Component</>
+function Product({ id, image, price, name }: ProductProps) {
+    return (
+        <Wrapper>
+            <div className='container'>
+                <img src={image} alt={name} />
+                <Link to={`/products/${id}`} className='link'>
+                    <FaSearch />
+                </Link>
+            </div>
+            <footer>
+                <h5>{name}</h5>
+                <p>{formatPrice(price)}</p>
+            </footer>
+        </Wrapper>
+    )
 }
 
 export default Product
