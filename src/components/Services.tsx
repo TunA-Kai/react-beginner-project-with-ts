@@ -1,9 +1,34 @@
 import styled from 'styled-components'
+import { services } from '../utils/constants'
 
 interface ServicesProps {}
 
 function Services({}: ServicesProps) {
-    return <>Services Component</>
+    return (
+        <Wrapper>
+            <div className='section-center'>
+                <article className='header'>
+                    <h3>
+                        custom furniture <br /> built only for you
+                    </h3>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur, adipisicing
+                        elit. Enim, sapiente. Quam culpa cumque possimus dolore
+                        quos iste error quisquam adipisci.
+                    </p>
+                </article>
+                <div className='services-center'>
+                    {services.map(({ icon, id, title, text }) => (
+                        <article key={id} className='service'>
+                            <span className='icon'>{icon}</span>
+                            <h4>{title}</h4>
+                            <p>{text}</p>
+                        </article>
+                    ))}
+                </div>
+            </div>
+        </Wrapper>
+    )
 }
 
 export default Services

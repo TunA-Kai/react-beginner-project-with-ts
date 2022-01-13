@@ -1,9 +1,16 @@
-interface HomePageProps {
-    
-}
+import { Contact, FeaturedProducts, Hero, Services } from '../components'
 
-function HomePage ({}: HomePageProps) {
-    return <>HomePage Component</>
+interface HomePageProps {}
+
+function HomePage({}: HomePageProps) {
+    return (
+        <main>
+            <Hero />
+            <FeaturedProducts />
+            <Services />
+            <Contact />
+        </main>
+    )
 }
 
 export default HomePage

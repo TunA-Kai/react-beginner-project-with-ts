@@ -3,7 +3,31 @@ import styled from 'styled-components'
 interface ContactProps {}
 
 function Contact({}: ContactProps) {
-    return <>Contact Component</>
+    return (
+        <Wrapper>
+            <div className='section-center'>
+                <h3>Join our newsletter and get 20% off</h3>
+                <div className='content'>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Ratione, aliquam aperiam unde facere tempora repellendus
+                        accusantium quia explicabo omnis hic.
+                    </p>
+                    <form action='' className='contact-form'>
+                        <input
+                            type='email'
+                            name='email'
+                            className='form-input'
+                            placeholder='enter email'
+                        />
+                        <button type='submit' className='submit-btn'>
+                            subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </Wrapper>
+    )
 }
 
 export default Contact
