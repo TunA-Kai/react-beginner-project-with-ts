@@ -1,9 +1,15 @@
 import styled from 'styled-components'
+import { PageHero } from '../components'
 
 interface CheckoutPageProps {}
 
 function CheckoutPage({}: CheckoutPageProps) {
-    return <>CheckoutPage Component</>
+    return (
+        <main>
+            <PageHero />
+            <Wrapper className='page'></Wrapper>
+        </main>
+    )
 }
 
 export default CheckoutPage

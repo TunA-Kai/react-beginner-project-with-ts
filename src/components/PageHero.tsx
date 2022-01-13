@@ -1,9 +1,20 @@
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 interface PageHeroProps {}
 
 function PageHero({}: PageHeroProps) {
-    return <>PageHero Component</>
+    const location = useLocation()
+    return (
+        <Wrapper>
+            <div className='section-center'>
+                <h3>
+                    <Link to='/'>Home</Link>
+                    {location.pathname}
+                </h3>
+            </div>
+        </Wrapper>
+    )
 }
 
 export default PageHero

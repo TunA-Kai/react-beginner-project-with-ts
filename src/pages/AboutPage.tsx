@@ -1,9 +1,31 @@
 import styled from 'styled-components'
+import { PageHero } from '../components'
+import aboutImg from '../assets/hero-bcg.jpeg'
 
 interface AboutPageProps {}
 
 function AboutPage({}: AboutPageProps) {
-    return <>AboutPage Component</>
+    return (
+        <main>
+            <PageHero />
+            <Wrapper className='page section section-center'>
+                <img src={aboutImg} alt='nice desk' />
+                <article>
+                    <div className='title'>
+                        <h2>our story</h2>
+                        <div className='underline'></div>
+                    </div>
+                    <p>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Unde nemo necessitatibus consectetur quia,
+                        explicabo architecto dolore minus accusamus sunt
+                        possimus hic ullam sequi dolor repellat optio, iste
+                        labore! Fugit, id.
+                    </p>
+                </article>
+            </Wrapper>
+        </main>
+    )
 }
 
 export default AboutPage

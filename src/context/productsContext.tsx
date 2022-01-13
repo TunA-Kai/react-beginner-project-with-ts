@@ -4,7 +4,6 @@ import {
     ReactNode,
     useContext,
     useReducer,
-    useState,
 } from 'react'
 import productsReducer from '../reducers/productsReducer'
 import { TProductsAction, TProductsState } from '../types/productsTypes'
