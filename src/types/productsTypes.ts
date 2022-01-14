@@ -17,6 +17,7 @@ interface TProductsState {
     error: string
     products: TProduct[]
     featuredProducts: TProduct[]
+    singleProduct: TProduct | null
 }
 
 type TProductsAction =
@@ -26,7 +27,7 @@ type TProductsAction =
     | { type: 'GET_PRODUCTS_SUCCESS'; products: TProduct[] }
     | { type: 'GET_PRODUCTS_ERROR'; errorMessage: string }
     | { type: 'GET_SINGLE_PRODUCTS_BEGIN' }
-    | { type: 'GET_SINGLE_PRODUCTS_SUCCESS' }
+    | { type: 'GET_SINGLE_PRODUCTS_SUCCESS'; singleProduct: TProduct }
     | { type: 'GET_SINGLE_PRODUCTS_ERROR'; errorMessage: string }
 
 export type { TProductsAction, TProductsState, TProduct }

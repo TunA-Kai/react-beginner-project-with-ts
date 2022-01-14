@@ -17,11 +17,14 @@ function productsReducer(
             const featuredProducts = products.filter(p => p.featured)
             return { ...state, status: 'success', products, featuredProducts }
         }
+        case 'GET_SINGLE_PRODUCTS_SUCCESS': {
+            const { singleProduct } = action
+            return { ...state, status: 'success', singleProduct }
+        }
         case 'GET_PRODUCTS_ERROR':
         case 'GET_SINGLE_PRODUCTS_ERROR':
             return { ...state, status: 'reject', error: action.errorMessage }
     }
-    return state
 }
 
 export default productsReducer

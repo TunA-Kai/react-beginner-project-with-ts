@@ -21,24 +21,43 @@ const initialState = {
     error: '',
     products: [],
     featuredProducts: [],
+    singleProduct: null,
 }
 
 const ProductsContext = createContext<
-    { state: TProductsState; dispatch: Dispatch<TProductsAction> } | undefined
+    | {
+          state: TProductsState
+          dispatch: Dispatch<TProductsAction>
+          fetchSingleProduct(url: string): Promise<void>
+      }
+    | undefined
 >(undefined)
 const { signal, abort } = new AbortController()
 
 function ProductsProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(productsReducer, initialState)
 
-    useEffect(() => {
-        async function fetchProducts(url: string) {
-            dispatch({ type: 'GET_PRODUCTS_BEGIN' })
+    function fetchProduct(type: 'single' | 'multiple') {
+        return async function _fetchProduct(url: string) {
+            dispatch({
+                type:
+                    type === 'single'
+                        ? 'GET_SINGLE_PRODUCTS_BEGIN'
+                        : 'GET_PRODUCTS_BEGIN',
+            })
             try {
-                const { data }: { data: TProduct[] } = await axios.get(url, {
+                const { data } = await axios.get(url, {
                     signal,
                 })
-                dispatch({ type: 'GET_PRODUCTS_SUCCESS', products: data })
+                type === 'single'
+                    ? dispatch({
+                          type: 'GET_SINGLE_PRODUCTS_SUCCESS',
+                          singleProduct: data,
+                      })
+                    : dispatch({
+                          type: 'GET_PRODUCTS_SUCCESS',
+                          products: data,
+                      })
             } catch (error: any) {
                 const { response, request } = error
                 const errorMessage = response
@@ -46,15 +65,28 @@ function ProductsProvider({ children }: { children: ReactNode }) {
                     : request
                     ? 'The request was made but no response was received'
                     : 'Something happened in setting up the request that triggered an Error'
-                dispatch({ type: 'GET_PRODUCTS_ERROR', errorMessage })
+                dispatch({
+                    type:
+                        type === 'single'
+                            ? 'GET_SINGLE_PRODUCTS_ERROR'
+                            : 'GET_PRODUCTS_ERROR',
+                    errorMessage,
+                })
             }
         }
-        fetchProducts(products_url)
+    }
+
+    useEffect(() => {
+        fetchProduct('multiple')(products_url)
 
         return () => abort()
     }, [])
 
-    const productsContextValue = { state, dispatch }
+    const productsContextValue = {
+        state,
+        dispatch,
+        fetchSingleProduct: fetchProduct('single'),
+    }
     return (
         <ProductsContext.Provider value={productsContextValue}>
             {children}
