@@ -13,20 +13,4 @@ interface TProduct {
 
 interface TSingleProduct {}
 
-interface TProductsState {
-    status: 'idle' | 'loading' | 'success' | 'reject'
-    error: string
-    products: TProduct[]
-    featuredProducts: TProduct[]
-    singleProduct: TSingleProduct | null
-}
-
-type TProductsAction =
-    | { type: 'GET_PRODUCTS_BEGIN' }
-    | { type: 'GET_PRODUCTS_SUCCESS'; products: TProduct[] }
-    | { type: 'GET_PRODUCTS_ERROR'; errorMessage: string }
-    | { type: 'GET_SINGLE_PRODUCTS_BEGIN' }
-    | { type: 'GET_SINGLE_PRODUCTS_SUCCESS'; singleProduct: TSingleProduct }
-    | { type: 'GET_SINGLE_PRODUCTS_ERROR'; errorMessage: string }
-
-export type { TProductsAction, TProductsState, TProduct }
+export type { TProduct }

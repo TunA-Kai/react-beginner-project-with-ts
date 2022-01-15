@@ -5,9 +5,7 @@ import { Error, Loading } from '../components'
 import { single_product_url } from '../utils/constants'
 import { useGetProduct } from '../utils/useGetProduct'
 
-interface SingleProductPageProps {}
-
-function SingleProductPage({}: SingleProductPageProps) {
+function SingleProductPage() {
     const { id } = useParams()
     const navigate = useNavigate()
     const {

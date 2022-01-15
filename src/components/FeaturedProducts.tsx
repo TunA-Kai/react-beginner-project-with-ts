@@ -4,9 +4,12 @@ import { useProductsContext } from '../context/productsContext'
 import Product from './Product'
 
 function FeaturedProducts() {
-    const { status, featuredProducts, error } = useProductsContext()
-    if (status === 'loading') return <Loading />
-    if (status === 'reject') return <Error error={error} />
+    const { status, products, error } = useProductsContext()
+
+    if (status === 'pending') return <Loading />
+    if (status === 'reject') return <Error error={error ?? ''} />
+
+    const featuredProducts = products.filter(p => p.featured)
     return (
         <Wrapper className='section'>
             <div className='title'>

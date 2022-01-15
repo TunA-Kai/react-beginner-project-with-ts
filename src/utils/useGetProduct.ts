@@ -3,13 +3,13 @@ import { useEffect, useReducer } from 'react'
 
 interface TState {
     status: 'pending' | 'success' | 'reject'
-    data?: unknown
+    data?: any
     error?: string
 }
 
 type TAction =
     | { type: 'GETTING_DATA' }
-    | { type: 'GETTING_DATA_SUCCESS'; data: unknown }
+    | { type: 'GETTING_DATA_SUCCESS'; data: any }
     | { type: 'GETTING_DATA_ERROR'; error: string }
 
 function reducer(state: TState, action: TAction): TState {
@@ -25,10 +25,9 @@ function reducer(state: TState, action: TAction): TState {
 
 const initialState = {
     status: 'pending' as const,
-    data: null,
 }
 
-const { signal, abort } = new AbortController()
+const { signal } = new AbortController()
 
 function useGetProduct(url: string) {
     const [state, dispatch] = useReducer(reducer, initialState)
@@ -51,8 +50,6 @@ function useGetProduct(url: string) {
         }
 
         getProduct(url)
-
-        return () => abort()
     }, [])
 
     return { ...state }
