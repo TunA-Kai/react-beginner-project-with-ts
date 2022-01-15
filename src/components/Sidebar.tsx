@@ -4,12 +4,13 @@ import { FaTimes } from 'react-icons/fa'
 import { links } from '../utils/constants'
 import { Link } from 'react-router-dom'
 import { CartButtons } from '.'
-import { useProductsContext } from '../context/productsContext'
+import { useSetShowSidebar, useShowSidebar } from '../context/sidebarContext'
 
 interface SidebarProps {}
 
 function Sidebar({}: SidebarProps) {
-    const { isSidebarOpen, closeSidebar } = useProductsContext()
+    const isSidebarOpen = useShowSidebar()
+    const { closeSidebar } = useSetShowSidebar()
 
     return (
         <SidebarContainer>

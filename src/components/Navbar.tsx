@@ -4,12 +4,12 @@ import logo from '../assets/logo.svg'
 import { FaBars } from 'react-icons/fa'
 import { links } from '../utils/constants'
 import { CartButtons } from '.'
-import { useProductsContext } from '../context/productsContext'
+import { useSetShowSidebar } from '../context/sidebarContext'
 
 interface NavbarProps {}
 
 function Navbar({}: NavbarProps) {
-    const { openSidebar } = useProductsContext()
+    const { openSidebar } = useSetShowSidebar()
     return (
         <NavContainer>
             <div className='nav-center'>

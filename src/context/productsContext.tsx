@@ -16,7 +16,6 @@ import {
 import { products_url } from '../utils/constants'
 
 const initialState = {
-    isSidebarOpen: false,
     status: 'idle' as const,
     error: '',
     products: [],
@@ -99,10 +98,8 @@ function useProductsContext() {
     if (context === undefined) {
         throw new Error('This component is not a child of ProductsProvider')
     }
-    const { dispatch, state, fetchSingleProduct } = context
-    const openSidebar = () => dispatch({ type: 'SIDEBAR_OPEN' })
-    const closeSidebar = () => dispatch({ type: 'SIDEBAR_CLOSE' })
-    return { ...state, openSidebar, closeSidebar, fetchSingleProduct }
+    const { state, fetchSingleProduct } = context
+    return { ...state, fetchSingleProduct }
 }
 
 export { useProductsContext, ProductsProvider }

@@ -5,10 +5,6 @@ function productsReducer(
     action: TProductsAction,
 ): TProductsState {
     switch (action.type) {
-        case 'SIDEBAR_OPEN':
-            return { ...state, isSidebarOpen: true }
-        case 'SIDEBAR_CLOSE':
-            return { ...state, isSidebarOpen: false }
         case 'GET_PRODUCTS_BEGIN':
         case 'GET_SINGLE_PRODUCTS_BEGIN':
             return { ...state, status: 'loading' }

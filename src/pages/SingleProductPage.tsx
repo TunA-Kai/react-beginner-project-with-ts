@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { Error, Loading } from '../components'
-import { useProductsContext } from '../context/productsContext'
 import { single_product_url } from '../utils/constants'
+import { useGetProduct } from '../utils/useGetProduct'
 
 interface SingleProductPageProps {}
 
 function SingleProductPage({}: SingleProductPageProps) {
     const { id } = useParams()
     const navigate = useNavigate()
-    const { status, fetchSingleProduct, singleProduct } = useProductsContext()
+    const {
+        data: singleProduct,
+        status,
+        error,
+    } = useGetProduct(single_product_url + id)
     const [second, setSecond] = useState(3)
     console.log(singleProduct)
-
-    useEffect(() => {
-        fetchSingleProduct(single_product_url + id)
-    }, [id])
 
     useEffect(() => {
         if (status === 'reject') {
@@ -30,11 +30,11 @@ function SingleProductPage({}: SingleProductPageProps) {
         }
     }, [status, second])
 
-    if (status === 'loading') return <Loading />
+    if (status === 'pending') return <Loading />
     if (status === 'reject')
         return (
             <>
-                <Error />
+                <Error error={error ?? ''} />
                 <h3>Go back to home page in {second}...</h3>
             </>
         )

@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Footer, Navbar, Sidebar } from './components'
+import { SidebarContext } from './context/sidebarContext'
 import {
     About,
     Cart,
@@ -13,8 +14,10 @@ import {
 function App() {
     return (
         <BrowserRouter>
-            <Navbar />
-            <Sidebar />
+            <SidebarContext>
+                <Navbar />
+                <Sidebar />
+            </SidebarContext>
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/about' element={<About />} />

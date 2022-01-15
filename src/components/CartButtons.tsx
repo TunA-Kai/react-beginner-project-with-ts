@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 import { FaShoppingCart, FaUserMinus, FaUserPlus } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import { useProductsContext } from '../context/productsContext'
+import { useSetShowSidebar } from '../context/sidebarContext'
 
 interface CartButtonsProps {}
 
 function CartButtons({}: CartButtonsProps) {
-    const { closeSidebar } = useProductsContext()
+    const { closeSidebar } = useSetShowSidebar()
     return (
         <Wrapper className='cart-btn-wrapper'>
             <Link to='/cart' className='cart-btn' onClick={closeSidebar}>

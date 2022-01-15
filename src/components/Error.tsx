@@ -1,9 +1,10 @@
 import { useProductsContext } from '../context/productsContext'
 
-interface ErrorProps {}
+interface ErrorProps {
+    error: string
+}
 
-function Error({}: ErrorProps) {
-    const { error } = useProductsContext()
+function Error({ error }: ErrorProps) {
     return (
         <div className='section section-center text-center'>
             <h2>{error}</h2>

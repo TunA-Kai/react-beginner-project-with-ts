@@ -14,7 +14,6 @@ interface TProduct {
 interface TSingleProduct {}
 
 interface TProductsState {
-    isSidebarOpen: boolean
     status: 'idle' | 'loading' | 'success' | 'reject'
     error: string
     products: TProduct[]
@@ -23,8 +22,6 @@ interface TProductsState {
 }
 
 type TProductsAction =
-    | { type: 'SIDEBAR_OPEN' }
-    | { type: 'SIDEBAR_CLOSE' }
     | { type: 'GET_PRODUCTS_BEGIN' }
     | { type: 'GET_PRODUCTS_SUCCESS'; products: TProduct[] }
     | { type: 'GET_PRODUCTS_ERROR'; errorMessage: string }

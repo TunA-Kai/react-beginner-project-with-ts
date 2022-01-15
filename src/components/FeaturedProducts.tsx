@@ -4,9 +4,9 @@ import { useProductsContext } from '../context/productsContext'
 import Product from './Product'
 
 function FeaturedProducts() {
-    const { status, featuredProducts } = useProductsContext()
+    const { status, featuredProducts, error } = useProductsContext()
     if (status === 'loading') return <Loading />
-    if (status === 'reject') return <Error />
+    if (status === 'reject') return <Error error={error} />
     return (
         <Wrapper className='section'>
             <div className='title'>
