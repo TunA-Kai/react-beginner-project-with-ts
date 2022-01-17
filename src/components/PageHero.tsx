@@ -1,16 +1,24 @@
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
-interface PageHeroProps {}
+interface PageHeroProps {
+    productTitle?: string
+}
 
-function PageHero({}: PageHeroProps) {
+function PageHero({ productTitle }: PageHeroProps) {
     const location = useLocation()
     return (
         <Wrapper>
             <div className='section-center'>
                 <h3>
                     <Link to='/'>Home</Link>
-                    {location.pathname}
+                    {productTitle ? (
+                        <>
+                            <Link to='/products'>/Products</Link>/{productTitle}
+                        </>
+                    ) : (
+                        location.pathname
+                    )}
                 </h3>
             </div>
         </Wrapper>

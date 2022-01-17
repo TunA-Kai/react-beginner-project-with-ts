@@ -27,18 +27,22 @@ const initialState = {
     status: 'pending' as const,
 }
 
-const { signal } = new AbortController()
-
 function useGetProduct(url: string) {
     const [state, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
+        const abortController = new AbortController()
         async function getProduct(url: string) {
             dispatch({ type: 'GETTING_DATA' })
             try {
-                const { data } = await axios.get(url, { signal })
+                const { data } = await axios.get(url, {
+                    signal: abortController.signal,
+                })
                 dispatch({ type: 'GETTING_DATA_SUCCESS', data })
             } catch (e: any) {
+                if (e.name === 'AbortError') {
+                    return
+                }
                 const { response, request } = e
                 const error = response
                     ? 'The request was made and the server responded with a status code that falls out of the range of 2xx'
@@ -50,7 +54,9 @@ function useGetProduct(url: string) {
         }
 
         getProduct(url)
-    }, [])
+
+        return () => abortController.abort()
+    }, [url])
 
     return { ...state }
 }

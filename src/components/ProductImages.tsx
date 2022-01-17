@@ -1,54 +1,74 @@
+import { useState } from 'react'
 import styled from 'styled-components'
+import { TImages } from '../types/productsTypes'
 
-interface ProductImagesProps {}
+interface ProductImagesProps {
+  images: TImages[]
+}
 
-function ProductImages({}: ProductImagesProps) {
-    return <>ProductImages Component</>
+function ProductImages({ images }: ProductImagesProps) {
+  const [mainImgIndex, setMainImg] = useState(0)
+  return (
+    <Wrapper>
+      <img src={images[mainImgIndex].url} alt='product' className='main' />
+      <div className='gallery'>
+        {images.map(({ url, id, filename }, index) => (
+          <img
+            src={url}
+            alt={filename}
+            key={id}
+            onClick={() => setMainImg(index)}
+            className={mainImgIndex === index ? 'active' : ''}
+          />
+        ))}
+      </div>
+    </Wrapper>
+  )
 }
 
 export default ProductImages
 
 const Wrapper = styled.section`
-    .main {
-        height: 600px;
-    }
+  .main {
+    height: 600px;
+  }
+  img {
+    width: 100%;
+    display: block;
+    border-radius: var(--radius);
+    object-fit: cover;
+  }
+  .gallery {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: 1rem;
     img {
-        width: 100%;
-        display: block;
-        border-radius: var(--radius);
-        object-fit: cover;
+      height: 100px;
+      cursor: pointer;
+    }
+  }
+  .active {
+    box-shadow: 0px 0px 0px 2px var(--clr-primary-5);
+  }
+  @media (max-width: 576px) {
+    .main {
+      height: 300px;
     }
     .gallery {
-        margin-top: 1rem;
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        column-gap: 1rem;
-        img {
-            height: 100px;
-            cursor: pointer;
-        }
+      img {
+        height: 50px;
+      }
     }
-    .active {
-        box-shadow: 0px 0px 0px 2px var(--clr-primary-5);
+  }
+  @media (min-width: 992px) {
+    .main {
+      height: 500px;
     }
-    @media (max-width: 576px) {
-        .main {
-            height: 300px;
-        }
-        .gallery {
-            img {
-                height: 50px;
-            }
-        }
+    .gallery {
+      img {
+        height: 75px;
+      }
     }
-    @media (min-width: 992px) {
-        .main {
-            height: 500px;
-        }
-        .gallery {
-            img {
-                height: 75px;
-            }
-        }
-    }
+  }
 `
