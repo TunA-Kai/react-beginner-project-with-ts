@@ -1,9 +1,7 @@
-import { useState } from 'react'
+import { useLocationState, useQueryState } from 'react-router-use-location-state'
 import styled from 'styled-components'
-
 import { Filters, Loading, PageHero, ProductList, Sort } from '../components'
 import { useProductsContext } from '../context/productsContext'
-
 import type { TFilter, TSort, TView } from '../types/filterTypes'
 
 interface ProductsPageProps {}
@@ -11,9 +9,9 @@ interface ProductsPageProps {}
 function ProductsPage({}: ProductsPageProps) {
     const { status } = useProductsContext()
 
-    const [view, setView] = useState<TView>('grid')
-    const [sort, setSort] = useState<TSort>('price-lowest')
-    const [filter, setFilter] = useState<TFilter>({
+    const [view, setView] = useQueryState<TView>('view', 'grid')
+    const [sort, setSort] = useQueryState<TSort>('sort', 'price-lowest')
+    const [filter, setFilter] = useLocationState<TFilter>('products filter', {
         text: '',
         company: 'all',
         category: 'all',

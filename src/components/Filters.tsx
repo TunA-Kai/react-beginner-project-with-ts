@@ -1,15 +1,15 @@
 import { useMemo } from 'react'
 import { FaCheck } from 'react-icons/fa'
 import styled from 'styled-components'
-
+import { SetLocationState } from 'use-location-state'
 import { useProductsContext } from '../context/productsContext'
+import { GiVenusOfWillendorf } from 'react-icons/gi'
+import type { TFilter } from '../types/filterTypes'
 import { formatPrice, getUniqueValues } from '../utils/helpers'
 
-// import { GiVenusOfWillendorf } from 'react-icons/gi'
-import type { TFilter } from '../types/filterTypes'
 interface FiltersProps {
     filter: TFilter
-    setFilter: React.Dispatch<React.SetStateAction<TFilter>>
+    setFilter: SetLocationState<TFilter>
 }
 
 function Filters({ filter, setFilter }: FiltersProps) {
