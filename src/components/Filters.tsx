@@ -1,9 +1,177 @@
+import { useMemo } from 'react'
+import { FaCheck } from 'react-icons/fa'
 import styled from 'styled-components'
 
-interface FiltersProps {}
+import { useProductsContext } from '../context/productsContext'
+import { formatPrice, getUniqueValues } from '../utils/helpers'
 
-function Filters({}: FiltersProps) {
-    return <>Filters Component</>
+// import { GiVenusOfWillendorf } from 'react-icons/gi'
+import type { TFilter } from '../types/filterTypes'
+interface FiltersProps {
+    filter: TFilter
+    setFilter: React.Dispatch<React.SetStateAction<TFilter>>
+}
+
+function Filters({ filter, setFilter }: FiltersProps) {
+    const { products } = useProductsContext()
+
+    const { text, category, color, company, shipping, price } = filter
+
+    function updateFilter(
+        event:
+            | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+            | React.MouseEvent<HTMLButtonElement>,
+    ) {
+        let {
+            name,
+            value,
+            textContent,
+            dataset: { color },
+            //@ts-ignore
+            checked,
+        } = event.currentTarget
+
+        const key = name as keyof TFilter
+
+        // when click on button the value = '', so we take the value of textContent
+        const newValue =
+            key === 'price'
+                ? Number(value)
+                : key === 'color'
+                ? color
+                : key === 'category'
+                ? textContent
+                : key === 'shipping'
+                ? (checked as boolean)
+                : value
+
+        setFilter(oldF => ({ ...oldF, [key]: newValue }))
+    }
+
+    function clearFilters(): void {
+        setFilter({
+            text: '',
+            company: 'all',
+            category: 'all',
+            color: 'all',
+            price: 0,
+            shipping: false,
+        })
+    }
+
+    const [maxPrice, minPrice] = useMemo(() => {
+        const prices = products.map(p => p.price)
+        return [Math.max(...prices), Math.min(...prices)]
+    }, [products])
+
+    const [categories, colors, companies] = useMemo(
+        () => [
+            getUniqueValues(products, 'category'),
+            getUniqueValues(products, 'colors'),
+            getUniqueValues(products, 'company'),
+        ],
+        [products],
+    )
+
+    return (
+        <Wrapper>
+            <div className='content'>
+                <form onSubmit={e => e.preventDefault()}>
+                    <div className='form-control'>
+                        <input
+                            type='text'
+                            name='text'
+                            placeholder='search'
+                            className='search-input'
+                            value={text}
+                            onChange={updateFilter}
+                        />
+                    </div>
+
+                    <div className='form-control'>
+                        <h5>category</h5>
+                        <div>
+                            {categories.map(cat => (
+                                <button
+                                    key={Math.random()}
+                                    type='button'
+                                    name='category'
+                                    onClick={updateFilter}
+                                    className={`${category === cat.toLowerCase() ? 'active' : ''}`}
+                                >
+                                    {cat}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className='form-control'>
+                        <h5>company</h5>
+                        <select
+                            name='company'
+                            value={company}
+                            onChange={updateFilter}
+                            className='company'
+                        >
+                            {companies.map(com => (
+                                <option value={com} key={Math.random()}>
+                                    {com}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className='form-control'>
+                        <h5>colors</h5>
+                        <div className='colors'>
+                            {colors.map(col => (
+                                <button
+                                    key={Math.random()}
+                                    name='color'
+                                    style={{ backgroundColor: col }}
+                                    className={`${color === col ? 'active' : ''} ${
+                                        col === 'all' ? 'all-btn' : 'color-btn'
+                                    } `}
+                                    data-color={col}
+                                    onClick={updateFilter}
+                                >
+                                    {col === 'all' ? 'all' : color === col ? <FaCheck /> : null}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className='form-control'>
+                        <h5>price</h5>
+                        <div className='price'>{formatPrice(price || maxPrice)}</div>
+                        <input
+                            type='range'
+                            name='price'
+                            onChange={updateFilter}
+                            max={maxPrice}
+                            min={minPrice}
+                            value={price || maxPrice}
+                        />
+                    </div>
+
+                    <div className='form-control shipping'>
+                        <label htmlFor='shipping'>free shipping</label>
+                        <input
+                            type='checkbox'
+                            name='shipping'
+                            id='shipping'
+                            onChange={updateFilter}
+                            checked={shipping}
+                        />
+                    </div>
+                </form>
+
+                <button type='button' className='clear-btn' onClick={clearFilters}>
+                    clear filters
+                </button>
+            </div>
+        </Wrapper>
+    )
 }
 
 export default Filters

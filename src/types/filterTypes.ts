@@ -1,13 +1,12 @@
-interface TFilterState {}
+type TView = 'grid' | 'list'
+type TSort = 'price-lowest' | 'price-highest' | 'name-a' | 'name-z'
+interface TFilter {
+    text: string
+    company: string
+    category: string
+    color: string
+    price: number
+    shipping: boolean
+}
 
-type TFilterAction =
-    | { type: 'LOAD_PRODUCTS' }
-    | { type: 'SET_LISTVIEW' }
-    | { type: 'SET_GRIDVIEW' }
-    | { type: 'UPDATE_SORT' }
-    | { type: 'SORT_PRODUCTS' }
-    | { type: 'UPDATE_FILTER' }
-    | { type: 'FILTER_PRODUCTS' }
-    | { type: 'CLEAR_FILTERS' }
-
-export type { TFilterAction, TFilterState }
+export type { TView, TSort, TFilter }
