@@ -1,9 +1,50 @@
+import { FaTrash } from 'react-icons/fa'
 import styled from 'styled-components'
+import { useCartContext } from '../context/cartContext'
+import { TCartProduct } from '../types/cartTypes'
+import { formatPrice } from '../utils/helpers'
+import AmountButtons from './AmountButtons'
 
-interface CartItemProps {}
+interface CartItemProps extends TCartProduct {}
 
-function CartItem({}: CartItemProps) {
-    return <>CartItem Component</>
+function CartItem({ color, amount, product, id }: CartItemProps) {
+    const { removeItem, toggleAmount } = useCartContext()
+    const {
+        images: [{ url, filename }],
+        name,
+        price,
+        stock,
+    } = product
+
+    function increase() {
+        const newAmount = amount < stock ? amount + 1 : amount
+        toggleAmount(id, newAmount)
+    }
+    function decrease() {
+        const newAmount = amount === 1 ? amount : amount - 1
+        toggleAmount(id, newAmount)
+    }
+
+    return (
+        <Wrapper>
+            <div className='title'>
+                <img src={url} alt={filename} />
+                <div>
+                    <h5 className='name'>{name}</h5>
+                    <p className='color'>
+                        color: <span style={{ backgroundColor: color }}></span>
+                    </p>
+                    <h5 className='price-small'>{formatPrice(price)}</h5>
+                </div>
+            </div>
+            <h5 className='price'>{formatPrice(price)}</h5>
+            <AmountButtons amount={amount} increase={increase} decrease={decrease} />
+            <h5 className='subtotal'>{formatPrice(price * amount)}</h5>
+            <button className='remove-btn' onClick={() => removeItem(id)}>
+                <FaTrash />
+            </button>
+        </Wrapper>
+    )
 }
 
 export default CartItem

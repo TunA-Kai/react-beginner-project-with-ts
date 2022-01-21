@@ -36,17 +36,7 @@ function SingleProductPage() {
         )
 
     const singleProduct: TSingleProduct = data
-    const {
-        name,
-        price,
-        description,
-        stock,
-        stars,
-        reviews,
-        id: sku,
-        company,
-        images,
-    } = singleProduct
+    const { name, price, description, stock, stars, reviews, id: sku, company, images } = singleProduct
     return (
         <Wrapper>
             <PageHero productTitle={name} />
@@ -74,7 +64,7 @@ function SingleProductPage() {
                             {company}
                         </p>
                         <hr />
-                        {stock > 0 && <AddToCart {...singleProduct} />}
+                        {stock > 0 && <AddToCart singleProduct={singleProduct} />}
                     </section>
                 </div>
             </div>

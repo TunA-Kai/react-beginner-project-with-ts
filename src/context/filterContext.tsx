@@ -5,11 +5,7 @@ const initialState = {}
 const FilterContext = createContext<{} | undefined>(undefined)
 
 function FilterProvider({ children }: { children: ReactNode }) {
-    return (
-        <FilterContext.Provider value={undefined}>
-            {children}
-        </FilterContext.Provider>
-    )
+    return <FilterContext.Provider value={undefined}>{children}</FilterContext.Provider>
 }
 
 function useFilterContext() {

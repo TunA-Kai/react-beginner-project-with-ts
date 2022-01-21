@@ -1,9 +1,30 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { useCartContext } from '../context/cartContext'
+import CartColumns from './CartColumns'
+import CartItem from './CartItem'
+import CartTotals from './CartTotals'
 
-interface CartContentProps {}
-
-function CartContent({}: CartContentProps) {
-    return <>CartContent Component</>
+function CartContent() {
+    const { cart, clearCart } = useCartContext()
+    return (
+        <Wrapper className='section section-center'>
+            <CartColumns />
+            {cart.map(p => (
+                <CartItem key={p.id} {...p} />
+            ))}
+            <hr />
+            <div className='link-container'>
+                <Link to='/products' className='link-btn'>
+                    continue shopping
+                </Link>
+                <button className='link-btn clear-btn' onClick={clearCart}>
+                    clear shopping cart
+                </button>
+            </div>
+            <CartTotals />
+        </Wrapper>
+    )
 }
 
 export default CartContent

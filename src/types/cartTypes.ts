@@ -1,10 +1,10 @@
-interface TCartState {}
+import { TSingleProduct } from './productsTypes'
 
-type TCartAction =
-    | { type: 'ADD_TO_CART' }
-    | { type: 'CLEAR_CART' }
-    | { type: 'COUNT_CART_TOTAL' }
-    | { type: 'REMOVE_CART_ITEM' }
-    | { type: 'TOGGLE_CART_ITEM_AMOUNT' }
+interface TCartProduct {
+    id: string
+    color: string
+    amount: number
+    product: TSingleProduct
+}
 
-export type { TCartAction, TCartState }
+export type { TCartProduct }
