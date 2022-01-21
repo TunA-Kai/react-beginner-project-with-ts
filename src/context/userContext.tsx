@@ -1,21 +1,23 @@
-import { createContext, ReactNode, useContext } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
+import { onAuthStateChanged, User } from 'firebase/auth'
+import { auth } from '../firebase.config'
 
-const UserContext = createContext(undefined)
+const UserContext = createContext<User | null | undefined>(undefined)
 
 function UserProvider({ children }: { children: ReactNode }) {
-    return (
-        <UserContext.Provider value={undefined}>
-            {children}
-        </UserContext.Provider>
-    )
+    const [user, setUser] = useState<User | null>(null)
+    onAuthStateChanged(auth, user => {
+        setUser(user)
+    })
+    return <UserContext.Provider value={user}>{children}</UserContext.Provider>
 }
 
 function useUserContext() {
-    const context = useContext(UserContext)
-    if (context === undefined) {
+    const user = useContext(UserContext)
+    if (user === undefined) {
         throw new Error('This component is not a child of UserProvider')
     }
-    return context
+    return user
 }
 
 export { useUserContext, UserProvider }

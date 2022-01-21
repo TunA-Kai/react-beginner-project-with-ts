@@ -1,15 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Footer, Navbar, Sidebar } from './components'
 import { SidebarContext } from './context/sidebarContext'
-import {
-    About,
-    Cart,
-    Checkout,
-    Error,
-    Home,
-    Products,
-    SingleProduct,
-} from './pages'
+import { About, Cart, Checkout, Error, Home, Products, SignIn, SingleProduct } from './pages'
 
 function App() {
     return (
@@ -24,6 +16,7 @@ function App() {
                 <Route path='/cart' element={<Cart />} />
                 <Route path='/products/:id' element={<SingleProduct />} />
                 <Route path='/checkout' element={<Checkout />} />
+                <Route path='/signin' element={<SignIn />} />
                 <Route path='/about' element={<About />} />
                 <Route path='*' element={<Error />} />
             </Routes>

@@ -3,12 +3,17 @@ import { FaShoppingCart, FaUserMinus, FaUserPlus } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { useSetShowSidebar } from '../context/sidebarContext'
 import { useCartContext } from '../context/cartContext'
+import { useUserContext } from '../context/userContext'
+import { signOut } from 'firebase/auth'
+import { auth } from '../firebase.config'
 
 interface CartButtonsProps {}
 
 function CartButtons({}: CartButtonsProps) {
     const { closeSidebar } = useSetShowSidebar()
     const { totalItems } = useCartContext()
+    const user = useUserContext()
+
     return (
         <Wrapper className='cart-btn-wrapper'>
             <Link to='/cart' className='cart-btn' onClick={closeSidebar}>
@@ -18,9 +23,15 @@ function CartButtons({}: CartButtonsProps) {
                     <span className='cart-value'>{totalItems}</span>
                 </span>
             </Link>
-            <button type='button' className='auth-btn'>
-                Login <FaUserPlus />
-            </button>
+            {user ? (
+                <button type='button' className='auth-btn' onClick={() => signOut(auth)}>
+                    Logout <FaUserMinus />
+                </button>
+            ) : (
+                <Link to='/signin' type='button' className='auth-btn'>
+                    Login <FaUserPlus />
+                </Link>
+            )}
         </Wrapper>
     )
 }
