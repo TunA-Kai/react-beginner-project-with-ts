@@ -8,13 +8,13 @@ import { UserProvider } from './context/userContext'
 
 ReactDOM.render(
     <React.StrictMode>
-        <ProductsProvider>
-            <CartProvider>
-                <UserProvider>
+        <UserProvider>
+            <ProductsProvider>
+                <CartProvider>
                     <App />
-                </UserProvider>
-            </CartProvider>
-        </ProductsProvider>
+                </CartProvider>
+            </ProductsProvider>
+        </UserProvider>
     </React.StrictMode>,
     document.getElementById('root'),
 )

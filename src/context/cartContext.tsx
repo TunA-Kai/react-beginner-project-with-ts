@@ -1,6 +1,16 @@
-import type { Dispatch, ReactNode, SetStateAction } from 'react'
-import { createContext, useContext, useState } from 'react'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
+import {
+    createContext,
+    Dispatch,
+    ReactNode,
+    SetStateAction,
+    useContext,
+    useEffect,
+    useState,
+} from 'react'
+import { db } from '../firebase.config'
 import type { TCartProduct } from '../types/cartTypes'
+import { useUserContext } from './userContext'
 
 interface CartContextType {
     cart: TCartProduct[]
@@ -11,6 +21,28 @@ const CartContext = createContext<CartContextType | undefined>(undefined)
 
 function CartProvider({ children }: { children: ReactNode }) {
     const [cart, setCart] = useState<TCartProduct[]>([])
+    const user = useUserContext()
+
+    useEffect(() => {
+        if (!user) {
+            setCart([])
+            return
+        }
+        getDoc(doc(db, 'cart', user.uid)).then(snapshot => {
+            const userCart = snapshot.data()
+            if (userCart) {
+                setCart(userCart.cart)
+            } else {
+                setDoc(doc(db, 'cart', user.uid), { cart })
+            }
+        })
+    }, [user])
+
+    useEffect(() => {
+        if (!user) return
+        setDoc(doc(db, 'cart', user.uid), { cart })
+    }, [cart])
+
     return <CartContext.Provider value={{ cart, setCart }}>{children}</CartContext.Provider>
 }
 
